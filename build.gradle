@@ -1,0 +1,85 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5' apply(false)
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'maven-publish'
+}
+
+group = 'nuts'
+version = '0.1'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'nuts'
+            artifactId = 'project-lib'
+            version = '0.1'
+            artifact jar
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+dependencies {
+
+    // Spring Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // Spring RestDocs
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    // Jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Test
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // FixtureMonkey
+    implementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'
+
+}
+
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    dependsOn test
+}
