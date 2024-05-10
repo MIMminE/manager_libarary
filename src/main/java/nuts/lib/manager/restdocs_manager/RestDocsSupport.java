@@ -1,4 +1,4 @@
-package nuts.lib.manager.rest_docs_manager;
+package nuts.lib.manager.restdocs_manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,11 +11,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class RestDocsSupport {
 
-    protected MockMvc mockMvc;
+    protected MockMvc mockController;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider){
-        this.mockMvc = MockMvcBuilders.standaloneSetup(initController())
+        this.mockController = MockMvcBuilders.standaloneSetup(initController())
                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider)).build();
     }
 

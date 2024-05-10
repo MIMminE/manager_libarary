@@ -1,4 +1,4 @@
-package nuts.lib.manager.rest_docs_manager;
+package nuts.lib.manager.restdocs_manager;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface RestDocsHolder {
-    RestDocsHolderType value() default RestDocsHolderType.request;
+    RestDocsHolderType value();
 
     enum RestDocsHolderType {
         request,

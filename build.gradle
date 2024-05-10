@@ -55,6 +55,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     // Spring RestDocs
+    implementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // Jpa

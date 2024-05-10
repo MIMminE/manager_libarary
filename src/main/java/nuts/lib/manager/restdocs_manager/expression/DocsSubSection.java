@@ -1,4 +1,4 @@
-package nuts.lib.manager.rest_docs_manager;
+package nuts.lib.manager.restdocs_manager.expression;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
-public @interface RestDocsSnippet {
-    RestDocsField[] value();
+@Target(ElementType.PARAMETER)
+public @interface DocsSubSection {
+    String name() default "";
+    String description() default "";
 }
