@@ -1,17 +1,21 @@
 package nuts.lib.manager.restdocs_manager.target;
 
-import nuts.lib.manager.restdocs_manager.RestDocsHolder;
-import nuts.lib.manager.restdocs_manager.RestDocsSnippet;
-import nuts.lib.manager.restdocs_manager.expression.DocsField;
+import nuts.lib.manager.restdocs_manager.DocsHolder;
+import nuts.lib.manager.restdocs_manager.DocsSnippet;
+import nuts.lib.manager.restdocs_manager.docs_snippet.expression.ExpressionField;
+import nuts.lib.manager.restdocs_manager.sub_section.expression.ExpressionSubSection;
 
-@RestDocsHolder(RestDocsHolder.RestDocsHolderType.request)
+@DocsHolder(DocsHolder.RestDocsHolderType.request)
 public class Target {
 
-    @RestDocsSnippet(fields = {
-            @DocsField(name = "groupName", description = "groupName"),
-            @DocsField(name = "groupAuthority.aquatic", description = "aquatic"),
-            @DocsField(name = "groupAuthority.agricultural", description = "agricultural"),
-            @DocsField(name = "groupAuthority.livestock", description = "livestock"),
+    @DocsSnippet(fields = {
+            @ExpressionField(name = "groupName", description = "groupName"),
+            @ExpressionField(name = "groupAuthority.aquatic", description = "aquatic"),
+            @ExpressionField(name = "groupAuthority.agricultural", description = "agricultural"),
+            @ExpressionField(name = "groupAuthority.livestock", description = "livestock", subSections = {
+                    @ExpressionSubSection(name = "data[].adminName", description = "adminNameDes"),
+                    @ExpressionSubSection(name = "data[].adminId", description = "adminIdDes")
+            }),
     })
     public Object test;
 }
