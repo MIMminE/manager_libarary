@@ -6,15 +6,15 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 
 class RestDocsManagerTest {
 
-    private final RestDocsManager restDocsManager = new RestDocsManager(AnnotationProcessorDelegator.INSTANCE);
+    private final RestDocsManager restDocsManager = new RestDocsManager(AnnotationProcessorDelegator.INSTANCE, Target.class);
 
     @Test
     void test() throws NoSuchFieldException {
         // given
         Target target = new Target();
-        RequestFieldsSnippet requestFieldsSnippet = restDocsManager.requestFieldsSnippet(Target.class.getDeclaredField("test"));
+//        RequestFieldsSnippet requestFieldsSnippet = restDocsManager.requestFieldsSnippet(Target.class.getDeclaredField("test"));
 
-        System.out.println(requestFieldsSnippet);
+        restDocsManager.document("d",Target.test);
 
 
 

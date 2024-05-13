@@ -17,5 +17,5 @@ public class Target {
                     @ExpressionSubSection(name = "data[].adminId", description = "adminIdDes")
             }),
     })
-    public Object test;
+    static public Integer test = 1;
 }

@@ -1,7 +1,5 @@
 package nuts.lib.manager.restdocs_manager;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
@@ -12,11 +10,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-public class RestDocsManager {
-
+public class RestDocsManager<REQ, RES> {
+    private final List<Class<?>> docsHolders;
     private final AnnotationProcessorDelegator annotationProcessorDelegator;
+
+    public RestDocsManager(AnnotationProcessorDelegator annotationProcessorDelegator, Class<?> ...docsHolders) {
+        this.annotationProcessorDelegator = annotationProcessorDelegator;
+        this.docsHolders = Arrays.stream(docsHolders).collect(Collectors.toList());
+    }
+
     private final RestDocsBuilder restDocsBuilder = new RestDocsBuilder();
 
     public RestDocsManager onPrettyPrint() {
@@ -39,6 +43,14 @@ public class RestDocsManager {
     public ResultHandler document(String documentName, Field docsResponseField) {
         return this.createDocument(documentName, this.responseFieldsSnippet(docsResponseField));
     }
+
+    public ResultHandler document(String documentName, Object requestHolderField) {
+        System.out.println(requestHolderField.hashCode());
+        System.out.println(requestHolderField.getClass());
+        System.out.println(requestHolderField).;
+        return null;
+    }
+
 
     public RequestFieldsSnippet requestFieldsSnippet(Field docsRequest) {
         if (docsRequest.getDeclaringClass().getAnnotation(DocsHolder.class).value() != DocsHolder.RestDocsHolderType.request)
