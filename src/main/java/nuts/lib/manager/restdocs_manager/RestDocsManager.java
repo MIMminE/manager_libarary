@@ -10,15 +10,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
-public class RestDocsManager<REQ, RES> {
-    private final List<Class<?>> docsHolders;
+public class RestDocsManager {
     private final AnnotationProcessorDelegator annotationProcessorDelegator;
+    private final List<Class<?>> requestHolders;
+    private final List<Class<?>> responseHolders;
 
-    public RestDocsManager(AnnotationProcessorDelegator annotationProcessorDelegator, Class<?> ...docsHolders) {
+    public RestDocsManager(AnnotationProcessorDelegator annotationProcessorDelegator, Class<?> requestHolder, Class<?> responseHolder) {
         this.annotationProcessorDelegator = annotationProcessorDelegator;
-        this.docsHolders = Arrays.stream(docsHolders).collect(Collectors.toList());
+        this.requestHolders = List.of(requestHolder);
+        this.responseHolders = List.of(responseHolder);
     }
 
     private final RestDocsBuilder restDocsBuilder = new RestDocsBuilder();
@@ -44,13 +46,31 @@ public class RestDocsManager<REQ, RES> {
         return this.createDocument(documentName, this.responseFieldsSnippet(docsResponseField));
     }
 
-    public ResultHandler document(String documentName, Object requestHolderField) {
-        System.out.println(requestHolderField.hashCode());
-        System.out.println(requestHolderField.getClass());
-        System.out.println(requestHolderField).;
-        return null;
-    }
+    public ResultHandler document(String documentName, Class<?> requestClass, Class<?> responseClass) throws NoSuchFieldException {
+        //TODO
+        Field requestField = null;
+        Field responseField = null;
 
+        for (Class<?> requestHolder : requestHolders) {
+            Field[] declaredFields = requestHolder.getDeclaredFields();
+            for (Field declaredField : declaredFields) {
+                if (Objects.equals(declaredField.getGenericType().getTypeName(), requestClass.getTypeName())) {
+                    requestField = requestHolder.getField(declaredField.getName());
+                }
+            }
+        }
+
+        for (Class<?> responseHolder : responseHolders) {
+            Field[] declaredFields = responseHolder.getDeclaredFields();
+            for (Field declaredField : declaredFields) {
+                if (Objects.equals(declaredField.getGenericType().getTypeName(), responseClass.getTypeName())) {
+                    responseField = responseHolder.getField(declaredField.getName());
+                }
+            }
+        }
+
+        return this.document(documentName, requestField, responseField);
+    }
 
     public RequestFieldsSnippet requestFieldsSnippet(Field docsRequest) {
         if (docsRequest.getDeclaringClass().getAnnotation(DocsHolder.class).value() != DocsHolder.RestDocsHolderType.request)

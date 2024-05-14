@@ -68,6 +68,8 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // FixtureMonkey
     implementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'

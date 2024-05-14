@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public abstract class MockMvcManager {

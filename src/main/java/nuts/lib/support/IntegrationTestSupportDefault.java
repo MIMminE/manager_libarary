@@ -8,4 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("Integration Test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class IntegrationTestSupportDefault {
+
 }
