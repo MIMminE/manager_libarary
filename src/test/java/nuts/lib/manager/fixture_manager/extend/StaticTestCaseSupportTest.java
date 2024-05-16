@@ -1,12 +1,13 @@
 package nuts.lib.manager.fixture_manager.extend;
 
+import nuts.lib.manager.fixture_manager.FixtureGenerateSupport;
 import nuts.lib.manager.fixture_manager.OrderSheet;
 import nuts.lib.manager.fixture_manager.target.RequestObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class StaticTestCaseSupportTest extends StaticTestCaseSupport {
+class StaticTestCaseSupportTest extends FixtureGenerateSupport {
 
     @Override
     protected List<OrderSheet> ordersObject() {
