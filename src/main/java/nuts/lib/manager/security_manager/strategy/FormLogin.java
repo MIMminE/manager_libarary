@@ -6,6 +6,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 
 public abstract class FormLogin {
 
-    static public HttpSecurityStrategy disable = h -> h.formLogin(AbstractHttpConfigurer::disable);
-    static public HttpSecurityStrategy enable = h -> h.formLogin(Customizer.withDefaults());
+    static public HttpSecurityStrategy disable = http -> http.formLogin(AbstractHttpConfigurer::disable);
+    static public HttpSecurityStrategy enable = http -> http.formLogin(Customizer.withDefaults());
 }

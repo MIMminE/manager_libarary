@@ -6,6 +6,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 
 public abstract class HttpBasic {
 
-    static public HttpSecurityStrategy disable = httpSecurity -> httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
-    static public HttpSecurityStrategy enable = httpSecurity -> httpSecurity.httpBasic(Customizer.withDefaults());
+    static public HttpSecurityStrategy disable = http -> http.httpBasic(AbstractHttpConfigurer::disable);
+    static public HttpSecurityStrategy enable = http -> http.httpBasic(Customizer.withDefaults());
 }

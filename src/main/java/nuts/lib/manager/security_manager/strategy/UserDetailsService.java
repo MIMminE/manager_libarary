@@ -5,8 +5,8 @@ import nuts.lib.manager.security_manager.HttpSecurityStrategy;
 public abstract class UserDetailsService {
 
     public static HttpSecurityStrategy dbInput(String uri) {
-        return httpSecurity -> {
-            httpSecurity.userDetailsService(null);
+        return http -> {
+            http.userDetailsService(null);
         };
     }
 
