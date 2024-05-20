@@ -1,4 +1,4 @@
 package nuts.lib.manager.message_manager;
 
-public interface Producer {
+public interface publisher {
 }
