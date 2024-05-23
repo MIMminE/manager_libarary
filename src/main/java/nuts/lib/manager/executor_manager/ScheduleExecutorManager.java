@@ -162,6 +162,9 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24),"Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime iterationTime, String scheduleName) {
         getScheduledExecutorService();
@@ -195,6 +198,9 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 3, "Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime iterationTime, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -211,6 +217,9 @@ public class ScheduleExecutorManager {
      *              executorManager, LocalTime.of(10, 24), 3, "Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleDailyAtSpecificTime(ExecutorManager executorManager, LocalTime iterationTime, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -229,6 +238,9 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 1800, "Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(Runnable runnable, LocalTime startTime, long secondTerm, String scheduleName) {
         getScheduledExecutorService();
@@ -245,6 +257,9 @@ public class ScheduleExecutorManager {
      *              executorManager, LocalTime.of(10, 24), 1800, "Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime startTime, long secondTerm, String scheduleName) {
         getScheduledExecutorService();
@@ -263,6 +278,9 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 1800, 3, "Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(Runnable runnable, LocalTime startTime, long secondTerm, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -279,6 +297,9 @@ public class ScheduleExecutorManager {
      *              executorManager, LocalTime.of(10, 24), 1800, 3, "Delete Daily Log");
      * }
      * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime startTime, long secondTerm, long limitCount, String scheduleName) {
         getScheduledExecutorService();
