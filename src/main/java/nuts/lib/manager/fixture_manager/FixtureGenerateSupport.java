@@ -8,6 +8,79 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * By inheriting a test class, you can easily configure a test fixture.
+ * <p>
+ * Use Manual
+ * <p>
+ * step 1. Override the {@link FixtureGenerateSupport#ordersObject()} method to wrap the various fixtures needed for the test in an {@link OrderSheet} class and return them as a list.
+ * <pre>
+ * {@code
+ *
+ *
+ * @Override
+ * protected List<OrderSheet> ordersObject() {
+ *     return List.of(
+ *             OrderSheet.order(Admin.class, 5),
+ *             OrderSheet.order(orderCustom(AdminEntity.class)
+ *                  .set("password", Arbitraries.strings().alpha().ofMaxLength(20)), 5),
+ *             OrderSheet.order(orderCustom(GroupEntity.class)
+ *                  .set("secretKey", Arbitraries.strings().alpha().ofMinLength(4).ofMaxLength(8)), 3),
+ *             OrderSheet.order(ApprovalEntity.class, 5));
+ * }
+ * }
+ * </pre>
+ * <p>
+ * step 2. Returns a list of fixtures created using the {@link FixtureGenerateSupport#getOrderedObject(Class)}.
+ *
+ * <pre>
+ * {@code
+ * List<Admin> testAdmins = getOrderedObject(Admin.class);
+ * List<AdminEntitySet> adminEntitiesSets =
+ *      getOrderedObject(AdminEntity.class).stream().map(AdminEntitySet::new).toList();
+ * List<GroupEntitySet> groupEntitiesSets =
+ *      getOrderedObject(GroupEntity.class).stream().map(GroupEntitySet::new).toList();
+ * }
+ * </pre>
+ * <p>
+ * It can inherit the Spring Integration Test Support class to help you pre-set up the environment you need for your tests.
+ *
+ * <pre>
+ * {@code
+ * @SpringBootTest
+ * @ActiveProfiles("test")
+ * public class IntegrationTestSupport extends FixtureGenerateSupport {
+ *
+ *
+ *     @Autowired
+ *     protected AdminRepository adminRepository;
+ *     @Autowired
+ *     protected GroupRepository groupRepository;
+ *     @Autowired
+ *     protected ApprovalRepository approvalRepository;
+ *     @Autowired
+ *     protected AdminService adminService;
+ *     @Autowired
+ *     protected ApprovalService approvalService;
+ *
+ *     @Override
+ *     protected List<OrderSheet> ordersObject() {
+ *         return List.of(
+ *                 OrderSheet.order(Admin.class, 5),
+ *                 OrderSheet.order(orderCustom(AdminEntity.class)
+ *                      .set("password", Arbitraries.strings().alpha().ofMaxLength(20)), 5),
+ *                 OrderSheet.order(orderCustom(GroupEntity.class)
+ *                      .set("secretKey", Arbitraries.strings().alpha().ofMinLength(4).ofMaxLength(8)), 3),
+ *                 OrderSheet.order(ApprovalEntity.class, 5));
+ *     }
+ * }
+ * }
+ *
+ * </pre>
+ *
+ * @author nuts
+ * @since 2024. 05. 23
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class FixtureGenerateSupport {
     private final FixtureMonkey fixtureMonkey = FixtureManager.supplierDefault.get();
@@ -46,7 +119,7 @@ public abstract class FixtureGenerateSupport {
         return fixtureMonkey.giveMe(targetClass, count);
     }
 
-    protected <T> ArbitraryBuilder<T> getFixtureBuilder(Class<T> targetClass){
+    protected <T> ArbitraryBuilder<T> getFixtureBuilder(Class<T> targetClass) {
         return fixtureMonkey.giveMeBuilder(targetClass);
     }
 

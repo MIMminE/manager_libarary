@@ -10,18 +10,37 @@ import net.jqwik.api.arbitraries.StringArbitrary;
 
 import java.util.function.Supplier;
 
+/**
+ * A manager used to create test class fixtures that are primarily used for testing purposes.
+ * <p>
+ * We need a class-specific builder because we create a fixture by referencing the builders in a given class.
+ * <p>
+ * Apply the Validation annotation in the field.
+ * <p>
+ * <pre>
+ * {@code
+ * FixtureMonkey fixtureMonkey = FixtureManager.supplierDefault.get();
+ * RequestUser requestCreateGroup = fixtureMonkey.giveMeOne(RequestUser.class);
+ * }
+ * </pre>
+ * <p>
+ * This class can be used separately, but the purpose is to inherit and use {@link FixtureGenerateSupport} for the test class.
+ *
+ * @author nuts
+ * @since 2024. 05. 23
+ */
 public abstract class FixtureManager {
 
     static public Supplier<FixtureMonkey> supplierDefault = () -> FixtureMonkey.builder()
-        .objectIntrospector(BuilderArbitraryIntrospector.INSTANCE)
-        .defaultNotNull(true).nullableElement(true).nullableElement(true)
-        .plugin(new JakartaValidationPlugin())
-        .plugin(new JqwikPlugin()
-                .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
-                    @Override
-                    public StringArbitrary strings() {
-                        return Arbitraries.strings().alpha();
-                    }
-                }))
-        .build();
+            .objectIntrospector(BuilderArbitraryIntrospector.INSTANCE)
+            .defaultNotNull(true).nullableElement(true).nullableElement(true)
+            .plugin(new JakartaValidationPlugin())
+            .plugin(new JqwikPlugin()
+                    .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
+                        @Override
+                        public StringArbitrary strings() {
+                            return Arbitraries.strings().alpha();
+                        }
+                    }))
+            .build();
 }
