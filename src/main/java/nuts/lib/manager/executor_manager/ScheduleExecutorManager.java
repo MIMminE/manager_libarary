@@ -9,6 +9,9 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+/**
+ * It provides the API needed to schedule tasks defined as {@link Runnable} or {@link ExecutorManager}.
+ */
 public class ScheduleExecutorManager {
 
     private ScheduledExecutorService scheduledExecutorService;
@@ -34,9 +37,22 @@ public class ScheduleExecutorManager {
     }
 
     /**
-     * If you use Runnable as the first parameter, the ScheduledExecutorService you entered the constructor will be the thread pool that does the work.
+     * Iterate over the actions defined in {@link Runnable} or {@link ExecutorManager} in milliseconds.
      * <p>
-     * and if you enter ExecutorManger, the [ExecutorService] you passed in to create the ExecutorManger will be the thread pool that does the work.
+     * It runs asynchronously on the thread pool given by the constructor or ExecutorManager constructor.
+     * <p>
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newScheduledExecutor(1).
+     * <pre>
+     *  {@code
+     *  ScheduleExecutorManager scheduleExecutorManager =
+     *                           new ScheduleExecutorManager(ExecutorBuilder.newScheduledExecutor(1));
+     *  scheduleExecutorManager.schedule(
+     *         ()-> System.out.println("Repetitive tasks"),
+     *         2000,
+     *         "Print Task Schedule"
+     *  );
+     *  }
+     *  </pre>
      *
      * @author nuts
      * @since 2024. 05. 22
@@ -49,6 +65,26 @@ public class ScheduleExecutorManager {
     }
 
 
+    /**
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newFixedExecutor(3).
+     * <p>
+     * <pre>
+     * {@code
+     * ScheduleExecutorManager scheduleExecutorManager =
+     *                  new ScheduleExecutorManager(ExecutorBuilder.newScheduledExecutor(1));
+     * ExecutorManager executorManager = new ExecutorManager(ExecutorBuilder.newFixedExecutor(3));
+     *
+     * executorManager.deferredSubmit(List.of(
+     *         () -> System.out.println("Repetitive tasks1"),
+     *         () -> System.out.println("Repetitive tasks2")
+     * ));
+     * scheduleExecutorManager.schedule(executorManager, 2000, "Print Task Schedule");
+     * }
+     * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
+     */
     public void schedule(ExecutorManager executorManager, long millisTerms, String scheduleName) {
         getScheduledExecutorService();
 
@@ -58,10 +94,27 @@ public class ScheduleExecutorManager {
 
 
     /**
-     * @param runnable
-     * @param millisTerms
-     * @param limitCount
-     * @param scheduleName
+     * Iterate on the action defined in the {@link Runnable} or {@link ExecutorManager} a set limitCount of times in a specific millisecond.
+     * <p>
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newScheduledExecutor(1).
+     * <p>
+     *
+     * <pre>
+     * {@code
+     * ScheduleExecutorManager scheduleExecutorManager =
+     *                  new ScheduleExecutorManager(ExecutorBuilder.newScheduledExecutor(1));
+     *
+     * scheduleExecutorManager.schedule(
+     *       () -> System.out.println("Repetitive tasks"),
+     *       2000,
+     *       10,
+     *       "Print Task Schedule"
+     *  );
+     * }
+     * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
      */
     public void schedule(Runnable runnable, long millisTerms, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -71,6 +124,26 @@ public class ScheduleExecutorManager {
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
+    /**
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newFixedExecutor(3).
+     * <p>
+     * <pre>
+     * {@code
+     * ScheduleExecutorManager scheduleExecutorManager =
+     *                  new ScheduleExecutorManager(ExecutorBuilder.newScheduledExecutor(1));
+     * ExecutorManager executorManager = new ExecutorManager(ExecutorBuilder.newFixedExecutor(3));
+     *
+     * executorManager.deferredSubmit(List.of(
+     *         () -> System.out.println("Repetitive tasks1"),
+     *         () -> System.out.println("Repetitive tasks2")
+     * ));
+     * scheduleExecutorManager.schedule(executorManager, 2000, 10, "Print Task Schedule");
+     * }
+     * </pre>
+     *
+     * @author nuts
+     * @since 2024. 05. 23
+     */
     public void schedule(ExecutorManager executorManager, long millisTerms, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
@@ -81,92 +154,137 @@ public class ScheduleExecutorManager {
 
 
     /**
-     * @param runnable
-     * @param specificTime
-     * @param scheduleName
+     * It is scheduled to run daily at a time defined as {@link LocalTime}. It is set in seconds.
+     * <p>
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleDailyAtSpecificTime(
+     *              ()-> logService.deleteLog()), LocalTime.of(10, 24),"Delete Daily Log");
+     * }
+     * </pre>
      */
-    public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime specificTime, String scheduleName) {
+    public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime iterationTime, String scheduleName) {
         getScheduledExecutorService();
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(iterationTime);
         scheduledExecutorService.scheduleAtFixedRate(runnable, timeUntil, 86400, TimeUnit.SECONDS);
     }
 
-    public void scheduleDailyAtSpecificTime(ExecutorManager executorManager, LocalTime specificTime, String scheduleName) {
+    /**
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleDailyAtSpecificTime(
+     *              executorManager, LocalTime.of(10, 24),"Delete Daily Log");
+     * }
+     * </pre>
+     */
+    public void scheduleDailyAtSpecificTime(ExecutorManager executorManager, LocalTime iterationTime, String scheduleName) {
         getScheduledExecutorService();
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(iterationTime);
         scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, timeUntil, 86400, TimeUnit.SECONDS);
     }
 
 
     /**
-     * @param runnable
-     * @param specificTime
-     * @param limitCount
-     * @param scheduleName
+     * It is scheduled to run daily at a time defined as {@link LocalTime}. It is set in seconds. <p>
+     * Set limitCount to limit the number of iterations (number of repeat days). <p>
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleDailyAtSpecificTime(
+     *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 3, "Delete Daily Log");
+     * }
+     * </pre>
      */
-    public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime specificTime, long limitCount, String scheduleName) {
+    public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime iterationTime, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(iterationTime);
         scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), timeUntil, 86400, TimeUnit.SECONDS);
     }
 
-    public void scheduleDailyAtSpecificTime(ExecutorManager executorManager, LocalTime specificTime, long limitCount, String scheduleName) {
+    /**
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleDailyAtSpecificTime(
+     *              executorManager, LocalTime.of(10, 24), 3, "Delete Daily Log");
+     * }
+     * </pre>
+     */
+    public void scheduleDailyAtSpecificTime(ExecutorManager executorManager, LocalTime iterationTime, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(iterationTime);
         scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), timeUntil, 86400, TimeUnit.SECONDS);
     }
 
 
     /**
-     * @param runnable
-     * @param specificTime
-     * @param secondTerm
-     * @param scheduleName
+     * Register a scheduler that repeats every unit of time from the start time. <p>
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleAtSpecificTime(
+     *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 1800, "Delete Daily Log");
+     * }
+     * </pre>
      */
-    public void scheduleAtSpecificTime(Runnable runnable, LocalTime specificTime, long secondTerm, String scheduleName) {
+    public void scheduleAtSpecificTime(Runnable runnable, LocalTime startTime, long secondTerm, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(startTime);
         scheduledExecutorService.scheduleAtFixedRate(runnable, timeUntil, secondTerm, TimeUnit.SECONDS);
     }
 
-    public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime specificTime, long secondTerm, String scheduleName) {
+    /**
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleAtSpecificTime(
+     *              executorManager, LocalTime.of(10, 24), 1800, "Delete Daily Log");
+     * }
+     * </pre>
+     */
+    public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime startTime, long secondTerm, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(startTime);
         scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, timeUntil, secondTerm, TimeUnit.SECONDS);
     }
 
 
     /**
-     * @param runnable
-     * @param specificTime
-     * @param secondTerm
-     * @param limitCount
-     * @param scheduleName
+     * Register a scheduler that iterates a certain number of times for every unit of time starting from the start time. <p>
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleAtSpecificTime(
+     *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 1800, 3, "Delete Daily Log");
+     * }
+     * </pre>
      */
-
-    public void scheduleAtSpecificTime(Runnable runnable, LocalTime specificTime, long secondTerm, long limitCount, String scheduleName) {
+    public void scheduleAtSpecificTime(Runnable runnable, LocalTime startTime, long secondTerm, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(startTime);
         scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), timeUntil, secondTerm, TimeUnit.SECONDS);
     }
 
-    public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime specificTime, long secondTerm, long limitCount, String scheduleName) {
+    /**
+     * <pre>
+     * {@code
+     * scheduleExecutorManager.scheduleAtSpecificTime(
+     *              executorManager, LocalTime.of(10, 24), 1800, 3, "Delete Daily Log");
+     * }
+     * </pre>
+     */
+    public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime startTime, long secondTerm, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
-        long timeUntil = getTimeUntil(specificTime);
+        long timeUntil = getTimeUntil(startTime);
         scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), timeUntil, secondTerm, TimeUnit.SECONDS);
     }
 
