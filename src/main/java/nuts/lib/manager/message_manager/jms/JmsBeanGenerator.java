@@ -8,20 +8,36 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 
-public abstract class JmsBeanGenerator {
+/**
+ * JmsAnnotationDrivenConfiguration
+ *
+ */
+public class JmsBeanGenerator {
 
-    static public JmsListenerContainerFactory<?> listenerContainerFactory(ConnectionFactory connectionFactory,
-                                                                          DefaultJmsListenerContainerFactoryConfigurer configurer) {
+    private final ConnectionFactory connectionFactory;
+
+    public ConnectionFactory getConnectionFactory(){
+        return connectionFactory;
+    }
+
+    public JmsBeanGenerator(String brokerUrl, String userName, String password) {
+        this.connectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl, userName, password));
+    }
+
+    /**
+     *  JmsAnnotationDrivenConfiguration
+     */
+    public JmsListenerContainerFactory<?> getListenerContainerFactory(DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
         return factory;
     }
 
-    static public CachingConnectionFactory jmsConnectionFactory(String brokerUrl, String userName, String password) {
-        return new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl, userName, password));
+    public JmsTemplate getJmsTemplate(){
+
+        JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
+        jmsTemplate.setPubSubDomain(true);
+        return jmsTemplate;
     }
 
-    static public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-        return new JmsTemplate(connectionFactory);
-    }
 }
