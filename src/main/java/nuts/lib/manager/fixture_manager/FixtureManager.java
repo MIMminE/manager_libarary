@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * This class can be used separately, but the purpose is to inherit and use {@link FixtureGenerateSupport} for the test class.
  *
  * @author nuts
- * @since 2024. 05. 23
+ * @since 2024. 05. 14
  */
 public abstract class FixtureManager {
 

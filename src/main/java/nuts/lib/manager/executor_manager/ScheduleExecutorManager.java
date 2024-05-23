@@ -11,6 +11,9 @@ import java.util.function.Supplier;
 
 /**
  * It provides the API needed to schedule tasks defined as {@link Runnable} or {@link ExecutorManager}.
+ *
+ * @author nuts
+ * @since 2024. 05. 23
  */
 public class ScheduleExecutorManager {
 
@@ -29,8 +32,6 @@ public class ScheduleExecutorManager {
      * A constructor that sets the service to lazy generate if you don't give the thread pool an action to run immediately.
      *
      * @param deferredScheduledExecutorService a supplier that provides the ScheduledExecutorService lazily
-     * @author nuts
-     * @since 2024. 05. 22
      */
     public ScheduleExecutorManager(Supplier<ScheduledExecutorService> deferredScheduledExecutorService) {
         this.deferredScheduledExecutorService = deferredScheduledExecutorService;
@@ -53,9 +54,6 @@ public class ScheduleExecutorManager {
      *  );
      *  }
      *  </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 22
      */
     public void schedule(Runnable runnable, long millisTerms, String scheduleName) {
         getScheduledExecutorService();
@@ -81,9 +79,6 @@ public class ScheduleExecutorManager {
      * scheduleExecutorManager.schedule(executorManager, 2000, "Print Task Schedule");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void schedule(ExecutorManager executorManager, long millisTerms, String scheduleName) {
         getScheduledExecutorService();
@@ -112,9 +107,6 @@ public class ScheduleExecutorManager {
      *  );
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void schedule(Runnable runnable, long millisTerms, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -140,9 +132,6 @@ public class ScheduleExecutorManager {
      * scheduleExecutorManager.schedule(executorManager, 2000, 10, "Print Task Schedule");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void schedule(ExecutorManager executorManager, long millisTerms, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -162,9 +151,6 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24),"Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime iterationTime, String scheduleName) {
         getScheduledExecutorService();
@@ -198,9 +184,6 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 3, "Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleDailyAtSpecificTime(Runnable runnable, LocalTime iterationTime, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -217,9 +200,6 @@ public class ScheduleExecutorManager {
      *              executorManager, LocalTime.of(10, 24), 3, "Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleDailyAtSpecificTime(ExecutorManager executorManager, LocalTime iterationTime, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -238,9 +218,6 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 1800, "Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(Runnable runnable, LocalTime startTime, long secondTerm, String scheduleName) {
         getScheduledExecutorService();
@@ -257,9 +234,6 @@ public class ScheduleExecutorManager {
      *              executorManager, LocalTime.of(10, 24), 1800, "Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime startTime, long secondTerm, String scheduleName) {
         getScheduledExecutorService();
@@ -278,9 +252,6 @@ public class ScheduleExecutorManager {
      *              ()-> logService.deleteLog()), LocalTime.of(10, 24), 1800, 3, "Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(Runnable runnable, LocalTime startTime, long secondTerm, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -297,9 +268,6 @@ public class ScheduleExecutorManager {
      *              executorManager, LocalTime.of(10, 24), 1800, 3, "Delete Daily Log");
      * }
      * </pre>
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void scheduleAtSpecificTime(ExecutorManager executorManager, LocalTime startTime, long secondTerm, long limitCount, String scheduleName) {
         getScheduledExecutorService();
@@ -315,8 +283,6 @@ public class ScheduleExecutorManager {
      *
      * @param scheduleName          name of the scheduler to abort
      * @param mayInterruptIfRunning Whether to force a quit for the currently running task, enter ture to abort the current task.
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void shutDownSchedule(String scheduleName, boolean mayInterruptIfRunning) {
         scheduledFutureMap.get(scheduleName).cancel(mayInterruptIfRunning);

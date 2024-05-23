@@ -35,9 +35,6 @@ public class ExecutorManager {
 
     /**
      * A constructor that sets the service to lazy generate if you don't give the thread pool an action to run immediately.
-     *
-     * @author nuts
-     * @since 2024. 05. 22
      */
     public ExecutorManager(Supplier<ExecutorService> deferredExecutorService) {
         this.deferredExecutorService = deferredExecutorService;
@@ -47,8 +44,6 @@ public class ExecutorManager {
      * Submit tasks stored in the blockingRunnableQueue to the thread pool.
      *
      * @throws NoSuchElementException - If there are no jobs in the blockingRunnableQueue
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void execute() {
         if (this.blockingRunnableQueue.isEmpty()) {
@@ -68,8 +63,6 @@ public class ExecutorManager {
      * {@link Future#get()} needs to be done to get the actual return value, and if the operation takes a long time, thread blocking can occur to get the result.
      *
      * @throws NoSuchElementException - If there are no jobs in the blockingCallableQueue
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public List<Future<?>> executeAndReturn() {
         if (this.blockingCallableQueue.isEmpty()) {
@@ -86,9 +79,6 @@ public class ExecutorManager {
 
     /**
      * Submit the Runnable to be executed immediately. It's the same as using a simple thread pool.
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public void submit(Runnable runnable) {
         if (this.executorService == null) {
@@ -101,9 +91,6 @@ public class ExecutorManager {
      * Submit the Callable to be executed immediately. It's the same as using a simple thread pool.
      * <p>
      * {@link Future#get()} needs to be done to get the actual return value, and if the operation takes a long time, thread blocking can occur to get the result.
-     *
-     * @author nuts
-     * @since 2024. 05. 23
      */
     public Future<?> submit(Callable<?> callable) {
         if (this.executorService == null) {
