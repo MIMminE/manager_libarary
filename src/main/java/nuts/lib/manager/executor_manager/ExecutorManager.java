@@ -6,6 +6,21 @@ import java.util.concurrent.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * It has a built-in {@link ExecutorService} and executes tasks declared as {@link Runnable} and {@link Callable}. <p>
+ * Tasks can be executed immediately or delayed.
+ * <p>
+ * The methods used for submitting deferred work are as follows:
+ * <p>
+ * Runnable Task <p>
+ * {@link ExecutorManager#deferredSubmit(Runnable)}, {@link ExecutorManager#deferredSubmit(List)}
+ * <p>
+ * Callable Task <p>
+ * {@link ExecutorManager#deferredSubmitCallable(Callable)}, {@link ExecutorManager#deferredSubmitCallable(List)}
+ *
+ * @author nuts
+ * @since 2024. 05. 23
+ */
 public class ExecutorManager {
 
     private ExecutorService executorService;
@@ -21,7 +36,6 @@ public class ExecutorManager {
     /**
      * A constructor that sets the service to lazy generate if you don't give the thread pool an action to run immediately.
      *
-     * @param deferredExecutorService a supplier that provides the ExecutorService lazily
      * @author nuts
      * @since 2024. 05. 22
      */
@@ -30,24 +44,11 @@ public class ExecutorManager {
     }
 
     /**
-     * Example - execute()
-     * <pre>
-     * {@code
-     *         Supplier<ExecutorService> serviceSupplier = () -> ExecutorBuilder.newFixedExecutor(5);
+     * Submit tasks stored in the blockingRunnableQueue to the thread pool.
      *
-     *         ExecutorManager executorManager = new ExecutorManager(serviceSupplier);
-     *
-     *         executorManager.deferredSubmit(() -> System.out.println("first Runnable"));
-     *         executorManager.deferredSubmit(() -> System.out.println("second Runnable"));
-     *         executorManager.deferredSubmit(() -> System.out.println("third Runnable"));
-     *
-     *         executorManager.execute();
-     *
-     * }
-     * </pre>
-     *
+     * @throws NoSuchElementException - If there are no jobs in the blockingRunnableQueue
      * @author nuts
-     * @since 2024. 05. 22
+     * @since 2024. 05. 23
      */
     public void execute() {
         if (this.blockingRunnableQueue.isEmpty()) {
@@ -62,24 +63,13 @@ public class ExecutorManager {
     }
 
     /**
-     * Example - executeAndReturn()
+     * It performs the tasks stored in the blockingCallableQueue and returns the results to a list of {@link Future}.
+     * <p>
+     * {@link Future#get()} needs to be done to get the actual return value, and if the operation takes a long time, thread blocking can occur to get the result.
      *
-     * <pre>
-     * {@code
-     *         Supplier<ExecutorService> serviceSupplier = () -> ExecutorBuilder.newFixedExecutor(5);
-     *
-     *         ExecutorManager executorManager = new ExecutorManager(serviceSupplier);
-     *
-     *         executorManager.deferredSubmitCallable(() -> "first Callable");
-     *         executorManager.deferredSubmitCallable(() -> "second Callable");
-     *         executorManager.deferredSubmitCallable(() -> "third Callable");
-     *
-     *         List<Future<?>> futures = executorManager.executeAndReturn();
-     *
-     * }
-     * </pre>
+     * @throws NoSuchElementException - If there are no jobs in the blockingCallableQueue
      * @author nuts
-     * @since 2024. 05. 22
+     * @since 2024. 05. 23
      */
     public List<Future<?>> executeAndReturn() {
         if (this.blockingCallableQueue.isEmpty()) {
@@ -93,6 +83,13 @@ public class ExecutorManager {
         return blockingCallableQueue.stream().map(c -> executorService.submit(c)).collect(Collectors.toList());
     }
 
+
+    /**
+     * Submit the Runnable to be executed immediately. It's the same as using a simple thread pool.
+     *
+     * @author nuts
+     * @since 2024. 05. 23
+     */
     public void submit(Runnable runnable) {
         if (this.executorService == null) {
             getExecutorService();
@@ -100,6 +97,14 @@ public class ExecutorManager {
         this.executorService.submit(runnable);
     }
 
+    /**
+     * Submit the Callable to be executed immediately. It's the same as using a simple thread pool.
+     * <p>
+     * {@link Future#get()} needs to be done to get the actual return value, and if the operation takes a long time, thread blocking can occur to get the result.
+     *
+     * @author nuts
+     * @since 2024. 05. 23
+     */
     public Future<?> submit(Callable<?> callable) {
         if (this.executorService == null) {
             getExecutorService();

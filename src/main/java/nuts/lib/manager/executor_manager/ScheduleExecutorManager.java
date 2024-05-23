@@ -41,7 +41,7 @@ public class ScheduleExecutorManager {
      * <p>
      * It runs asynchronously on the thread pool given by the constructor or ExecutorManager constructor.
      * <p>
-     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newScheduledExecutor(1).
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder#newScheduledExecutor(int)}.
      * <pre>
      *  {@code
      *  ScheduleExecutorManager scheduleExecutorManager =
@@ -66,7 +66,7 @@ public class ScheduleExecutorManager {
 
 
     /**
-     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newFixedExecutor(3).
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder#newFixedExecutor(int)}.
      * <p>
      * <pre>
      * {@code
@@ -96,7 +96,7 @@ public class ScheduleExecutorManager {
     /**
      * Iterate on the action defined in the {@link Runnable} or {@link ExecutorManager} a set limitCount of times in a specific millisecond.
      * <p>
-     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newScheduledExecutor(1).
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder#newScheduledExecutor(int)}.
      * <p>
      *
      * <pre>
@@ -125,7 +125,7 @@ public class ScheduleExecutorManager {
     }
 
     /**
-     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder}.newFixedExecutor(3).
+     * In the example, it runs on {@link nuts.lib.manager.executor_manager.executor.ExecutorBuilder#newFixedExecutor(int)}.
      * <p>
      * <pre>
      * {@code
@@ -310,6 +310,14 @@ public class ScheduleExecutorManager {
     }
 
 
+    /**
+     * Interrupt the running scheduler. Internally, we use the ScheduledFuture class API.
+     *
+     * @param scheduleName          name of the scheduler to abort
+     * @param mayInterruptIfRunning Whether to force a quit for the currently running task, enter ture to abort the current task.
+     * @author nuts
+     * @since 2024. 05. 23
+     */
     public void shutDownSchedule(String scheduleName, boolean mayInterruptIfRunning) {
         scheduledFutureMap.get(scheduleName).cancel(mayInterruptIfRunning);
     }
