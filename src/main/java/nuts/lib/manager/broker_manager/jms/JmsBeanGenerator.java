@@ -1,4 +1,4 @@
-package nuts.lib.manager.message_manager.jms;
+package nuts.lib.manager.broker_manager.jms;
 
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
@@ -39,5 +39,4 @@ public class JmsBeanGenerator {
         jmsTemplate.setPubSubDomain(true);
         return jmsTemplate;
     }
-
 }

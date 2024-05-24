@@ -1,4 +1,4 @@
-package nuts.lib.manager.message_manager.jms;
+package nuts.lib.manager.broker_manager.jms;
 
 import java.util.concurrent.ThreadFactory;
 

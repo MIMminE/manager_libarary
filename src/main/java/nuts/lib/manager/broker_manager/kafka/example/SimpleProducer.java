@@ -1,4 +1,4 @@
-package nuts.lib.manager.message_manager.kafka.example;
+package nuts.lib.manager.broker_manager.kafka.example;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
