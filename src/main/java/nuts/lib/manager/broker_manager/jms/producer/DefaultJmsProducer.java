@@ -1,6 +1,5 @@
 package nuts.lib.manager.broker_manager.jms.producer;
 
-import jakarta.jms.Message;
 import nuts.lib.manager.broker_manager.jms.config.JmsProducerConfig;
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;

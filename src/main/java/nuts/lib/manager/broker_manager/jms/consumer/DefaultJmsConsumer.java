@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 
 public class DefaultJmsConsumer extends JmsConsumer {
 
-    private final ExecutorManager consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(1, "jms_consumer"));
-
     public DefaultJmsConsumer(JmsTemplate jmsTemplate, JmsConsumerConfig config) {
         super(jmsTemplate, config);
     }
+
+    private final ExecutorManager consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(1, "jms_consumer"));
 
     @Override
     public Message syncReceive() {
