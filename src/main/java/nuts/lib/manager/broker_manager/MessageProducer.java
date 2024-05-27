@@ -1,7 +1,7 @@
 package nuts.lib.manager.broker_manager;
 
-public interface MessageProducer{
+public abstract class MessageProducer<M> {
 
-    void send();
-
+    public void send(M message) {
+    }
 }

@@ -4,25 +4,13 @@ import nuts.lib.manager.broker_manager.MessageProducer;
 import nuts.lib.manager.broker_manager.jms.config.JmsProducerConfig;
 import org.springframework.jms.core.JmsTemplate;
 
-public class JmsProducer implements MessageProducer{
+public abstract class JmsProducer extends MessageProducer<Object> {
 
-    private final JmsTemplate jmsTemplate;
-    private final JmsProducerConfig config;
-
+    protected JmsTemplate jmsTemplate;
+    protected JmsProducerConfig config;
 
     public JmsProducer(JmsTemplate jmsTemplate, JmsProducerConfig config) {
         this.jmsTemplate = jmsTemplate;
         this.config = config;
-    }
-
-
-    public void send(Object message) {
-        jmsTemplate.convertAndSend(config.getDestination(), message);
-
-    }
-
-    @Override
-    public void send() {
-
     }
 }

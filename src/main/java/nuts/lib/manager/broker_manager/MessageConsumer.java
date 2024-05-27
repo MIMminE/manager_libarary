@@ -1,6 +1,13 @@
 package nuts.lib.manager.broker_manager;
 
-public interface MessageConsumer {
+import java.util.function.Consumer;
 
-    void receive();
+public abstract class MessageConsumer<M> {
+
+    public M syncReceive() {
+        return null;
+    }
+
+    public void asyncReceive(Consumer<M> callback) {
+    }
 }

@@ -1,10 +1,12 @@
 package nuts.lib.manager.broker_manager.kafka.producer;
 
 import nuts.lib.manager.broker_manager.MessageProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
-public class KafkaProducer implements MessageProducer {
+public abstract class KafkaProducer extends MessageProducer<ProducerRecord<?, ?>> {
+
     @Override
-    public void send() {
+    public void send(ProducerRecord<?, ?> message) {
 
     }
 }

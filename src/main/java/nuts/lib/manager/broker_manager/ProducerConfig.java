@@ -1,4 +1,4 @@
 package nuts.lib.manager.broker_manager;
 
-public abstract class ProducerConfig {
+public abstract class ProducerConfig<MP> {
 }
