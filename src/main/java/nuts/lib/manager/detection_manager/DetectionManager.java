@@ -5,7 +5,6 @@ import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DetectionManager<T> {
 

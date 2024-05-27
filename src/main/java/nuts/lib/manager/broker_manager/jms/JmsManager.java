@@ -10,6 +10,12 @@ import org.springframework.util.Assert;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * ActiveMQ is a client manager implementation of the message broker.
+ *
+ * @author nuts
+ * @since 2024. 05. 27
+ */
 public class JmsManager implements BrokerManager<JmsProducer, JmsProducerConfig, JmsConsumer, JmsConsumerConfig> {
 
     private JmsTemplate jmsTemplate;
