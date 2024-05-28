@@ -22,13 +22,19 @@ public class DefaultJmsProducer extends JmsProducer {
 
 
     public void sendOnScheduler(Object message, long mills) {
-        producerScheduler.schedule(() -> jmsTemplate.convertAndSend(config.getDestination(), message), mills, "sendScheduler");
+        producerScheduler.schedule(() ->
+                jmsTemplate.convertAndSend(config.getDestination(), message), mills, "sendScheduler");
     }
 
     public void sendOnScheduler(List<Object> message, long mills) {
         new Thread(() -> {
             for (Object o : message) {
-                jmsTemplate.convertAndSend(config.getDestination(), o);
+                try {
+                    jmsTemplate.convertAndSend(config.getDestination(), o);
+                } catch (Exception e){
+                    System.out.println(e);
+                }
+
                 try {
                     Thread.sleep(mills);
                 } catch (InterruptedException e) {

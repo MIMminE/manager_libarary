@@ -5,6 +5,8 @@ import nuts.lib.manager.broker_manager.jms.config.JmsConsumerConfig;
 import nuts.lib.manager.broker_manager.jms.config.JmsProducerConfig;
 import nuts.lib.manager.broker_manager.jms.consumer.JmsConsumer;
 import nuts.lib.manager.broker_manager.jms.producer.JmsProducer;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.util.Assert;
 
@@ -35,6 +37,13 @@ public class JmsManager implements BrokerManager<JmsProducer, JmsProducerConfig,
     public JmsManager postConstruct(JmsTemplate jmsTemplate) {
         jmsTemplate.setPubSubDomain(true);
         this.jmsTemplate = jmsTemplate;
+        return this;
+    }
+
+    public JmsManager postConstruct(String brokerUrl, String userName, String password) {
+
+        this.jmsTemplate = new JmsTemplate(new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl, userName, password)));
+        this.jmsTemplate.setPubSubDomain(true);
         return this;
     }
 }

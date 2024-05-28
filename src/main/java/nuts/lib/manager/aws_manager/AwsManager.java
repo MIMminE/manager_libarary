@@ -4,5 +4,4 @@ import com.amazonaws.AmazonWebServiceClient;
 
 public class AwsManager {
 
-    AmazonWebServiceClient
 }
