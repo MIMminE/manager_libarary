@@ -1,4 +1,4 @@
-package nuts.lib.manager.detection_manager.detectors;
+package nuts.lib.manager.detection_manager.detector;
 
 import nuts.lib.manager.detection_manager.Detector;
 

@@ -2,6 +2,7 @@ package nuts.lib.manager.detection_manager;
 
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class DetectionManager<T> {
         this.scheduleName = scheduleName;
     }
 
+    @Transactional
     public void run() throws ExecutionException, InterruptedException {
         scheduleExecutorManager.schedule(() -> {
             List<T> postProcessTargets = new ArrayList<>();
@@ -36,8 +38,8 @@ public class DetectionManager<T> {
                             postProcessTargets.add(detectElement);
                         });
             });
-            System.out.println(postProcessTargets);
             detectSource.postProcess(postProcessTargets);
         }, intervalPoll, scheduleName);
     }
+
 }
