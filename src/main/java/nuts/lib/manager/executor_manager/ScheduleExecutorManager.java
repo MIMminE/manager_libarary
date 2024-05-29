@@ -55,10 +55,11 @@ public class ScheduleExecutorManager {
      *  }
      *  </pre>
      */
-    public void schedule(Runnable runnable, long millisTerms, String scheduleName) {
+    public void schedule(Runnable runnable, long millisTerms, String scheduleName) throws ExecutionException, InterruptedException {
         getScheduledExecutorService();
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0L, millisTerms, TimeUnit.MILLISECONDS);
+        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -80,10 +81,11 @@ public class ScheduleExecutorManager {
      * }
      * </pre>
      */
-    public void schedule(ExecutorManager executorManager, long millisTerms, String scheduleName) {
+    public void schedule(ExecutorManager executorManager, long millisTerms, String scheduleName) throws ExecutionException, InterruptedException {
         getScheduledExecutorService();
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, 0L, millisTerms, TimeUnit.MILLISECONDS);
+        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -108,11 +110,12 @@ public class ScheduleExecutorManager {
      * }
      * </pre>
      */
-    public void schedule(Runnable runnable, long millisTerms, long limitCount, String scheduleName) {
+    public void schedule(Runnable runnable, long millisTerms, long limitCount, String scheduleName) throws ExecutionException, InterruptedException {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), 0L, millisTerms, TimeUnit.MILLISECONDS);
+        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -133,11 +136,12 @@ public class ScheduleExecutorManager {
      * }
      * </pre>
      */
-    public void schedule(ExecutorManager executorManager, long millisTerms, long limitCount, String scheduleName) {
+    public void schedule(ExecutorManager executorManager, long millisTerms, long limitCount, String scheduleName) throws ExecutionException, InterruptedException {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), 0L, millisTerms, TimeUnit.MILLISECONDS);
+        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -318,4 +322,5 @@ public class ScheduleExecutorManager {
                 this.shutDownSchedule(scheduleName, false);
         };
     }
+
 }

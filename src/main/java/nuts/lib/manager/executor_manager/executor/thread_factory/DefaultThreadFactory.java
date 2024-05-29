@@ -1,4 +1,4 @@
-package nuts.lib.manager.executor_manager.executor;
+package nuts.lib.manager.executor_manager.executor.thread_factory;
 
 import java.util.concurrent.ThreadFactory;
 

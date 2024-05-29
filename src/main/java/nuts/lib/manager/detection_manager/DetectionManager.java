@@ -5,6 +5,7 @@ import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class DetectionManager<T> {
 
@@ -22,7 +23,7 @@ public class DetectionManager<T> {
         this.scheduleName = scheduleName;
     }
 
-    public void run() {
+    public void run() throws ExecutionException, InterruptedException {
         scheduleExecutorManager.schedule(() -> {
             List<T> postProcessTargets = new ArrayList<>();
 

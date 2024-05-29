@@ -1,6 +1,6 @@
 package nuts.lib.manager.executor_manager.executor.builder;
 
-import nuts.lib.manager.executor_manager.executor.DefaultThreadFactory;
+import nuts.lib.manager.executor_manager.executor.thread_factory.DefaultThreadFactory;
 
 import java.util.concurrent.*;
 

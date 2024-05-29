@@ -3,9 +3,11 @@ package nuts.lib.manager.broker_manager.jms.producer;
 import nuts.lib.manager.broker_manager.jms.config.JmsProducerConfig;
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
+import nuts.lib.manager.executor_manager.executor.thread_factory.UncaughtExceptionThreadFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class DefaultJmsProducer extends JmsProducer {
 
@@ -21,25 +23,14 @@ public class DefaultJmsProducer extends JmsProducer {
     }
 
 
-    public void sendOnScheduler(Object message, long mills) {
-        producerScheduler.schedule(() ->
-                jmsTemplate.convertAndSend(config.getDestination(), message), mills, "sendScheduler");
+    public void sendOnScheduler(Object message, long mills) throws ExecutionException, InterruptedException {
+        producerScheduler.schedule(() -> jmsTemplate.convertAndSend(config.getDestination(), message), mills, "sendScheduler");
     }
 
     public void sendOnScheduler(List<Object> message, long mills) {
         new Thread(() -> {
             for (Object o : message) {
-                try {
-                    jmsTemplate.convertAndSend(config.getDestination(), o);
-                } catch (Exception e){
-                    System.out.println(e);
-                }
-
-                try {
-                    Thread.sleep(mills);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                jmsTemplate.convertAndSend(config.getDestination(), o);
             }
         }).start();
     }

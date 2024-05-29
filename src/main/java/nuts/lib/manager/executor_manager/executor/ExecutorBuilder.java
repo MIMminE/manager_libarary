@@ -3,6 +3,7 @@ package nuts.lib.manager.executor_manager.executor;
 import nuts.lib.manager.executor_manager.executor.builder.CachedPoolBuilder;
 import nuts.lib.manager.executor_manager.executor.builder.FixedPoolBuilder;
 import nuts.lib.manager.executor_manager.executor.builder.ScheduledPoolBuilder;
+import nuts.lib.manager.executor_manager.executor.thread_factory.DefaultThreadFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -35,15 +35,18 @@ public class JmsManager implements BrokerManager<JmsProducer, JmsProducerConfig,
     }
 
     public JmsManager postConstruct(JmsTemplate jmsTemplate) {
-        jmsTemplate.setPubSubDomain(true);
+        this.jmsTemplate = jmsTemplate;
+        return this;
+    }
+
+    public JmsManager postConstruct(JmsTemplate jmsTemplate, boolean topicModeEnable) {
+        jmsTemplate.setPubSubDomain(topicModeEnable);
         this.jmsTemplate = jmsTemplate;
         return this;
     }
 
     public JmsManager postConstruct(String brokerUrl, String userName, String password) {
-
         this.jmsTemplate = new JmsTemplate(new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl, userName, password)));
-        this.jmsTemplate.setPubSubDomain(true);
         return this;
     }
 }
