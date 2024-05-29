@@ -16,7 +16,10 @@ import org.springframework.jms.core.JmsTemplate;
 import java.util.Arrays;
 
 /**
- * JmsAnnotationDrivenConfiguration
+ * This is a generator class that is used when you want to manually register multiple beans for ActiveMQ use.
+ *
+ * @author nuts
+ * @since 2024. 05. 29
  */
 @Getter
 public class JmsBeanGenerator {
@@ -28,7 +31,7 @@ public class JmsBeanGenerator {
     }
 
     /**
-     * JmsAnnotationDrivenConfiguration
+     * A listener factory that is automatically set up via the JmsAnnotationDrivenConfiguration class.
      */
     public JmsListenerContainerFactory<?> getListenerContainerFactory(DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
@@ -44,7 +47,14 @@ public class JmsBeanGenerator {
     }
 
 
-    public static ActiveMQConnectionFactory ActiveMqConnectionFactoryWithHA(ActiveMqHaEndpointConfig... configs) {
+    /**
+     * Set up distributed broker endpoints for high availability.
+     * <p>
+     * By default, it is set to send data to endpoints in a round-robin fashion,
+     * but it does not guarantee the remnants of distributed systems such as replicas.
+     * That is done through the server settings
+     */
+    public static ActiveMQConnectionFactory ActiveMqConnectionFactoryWithHA(ActiveMqHaEndpointConfig[] configs, String userName, String password) {
 
         TransportConfiguration[] configurations = Arrays.stream(configs).map(c -> {
             TransportConfiguration transportConfiguration = new TransportConfiguration(NettyConnectorFactory.class.getName());
@@ -53,8 +63,11 @@ public class JmsBeanGenerator {
             return transportConfiguration;
         }).toArray(TransportConfiguration[]::new);
 
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(true, configurations);
+        connectionFactory.setUser(userName);
+        connectionFactory.setPassword(password);
 
-        return new ActiveMQConnectionFactory(true, configurations);
+        return connectionFactory;
     }
 
     @Getter

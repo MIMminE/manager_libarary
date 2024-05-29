@@ -39,6 +39,11 @@ public class JmsManager implements BrokerManager<JmsProducer, JmsProducerConfig,
         return this;
     }
 
+    /**
+     * By default, it supports the anycast method,
+     * <p>
+     * but it also supports the topic format like Kafka's way of working. To do this, we need to give the second argument true.
+     */
     public JmsManager postConstruct(JmsTemplate jmsTemplate, boolean topicModeEnable) {
         jmsTemplate.setPubSubDomain(topicModeEnable);
         this.jmsTemplate = jmsTemplate;
