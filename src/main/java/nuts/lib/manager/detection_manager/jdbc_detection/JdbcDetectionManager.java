@@ -31,7 +31,6 @@ public class JdbcDetectionManager {
         scheduleExecutorManager.schedule(() -> {
             List<Map<String, Object>> processed = detectionProcessor.process(detectSource.poll());
             postProcessor.process(processed);
-            System.out.println(Thread.currentThread().getName());
         }, intervalMillis, "jdbc monitoring");
     }
 }

@@ -55,10 +55,24 @@ public class ScheduleExecutorManager {
      *  }
      *  </pre>
      */
-    public void schedule(Runnable runnable, long millisTerms, String scheduleName) {
+    public void schedule(Runnable runnable, long millisTerms, String scheduleName) throws ExecutionException, InterruptedException {
         getScheduledExecutorService();
 
-        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0L, millisTerms, TimeUnit.MILLISECONDS);
+
+        Runnable runnable1 = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } catch (Exception e){
+                    System.out.println(Thread.currentThread().getName() + " " + e);
+                }
+
+            }
+        };
+
+
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable1, 0L, millisTerms, TimeUnit.MILLISECONDS);
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
