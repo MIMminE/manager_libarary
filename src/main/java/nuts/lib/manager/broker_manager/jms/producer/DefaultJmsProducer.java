@@ -17,6 +17,7 @@ public class DefaultJmsProducer extends JmsProducer {
     @Override
     public void send(Object message) {
         jmsTemplate.convertAndSend(config.getDestination(), message);
+        // TODO Exceptions should be raised if the wrong broker is found
     }
 
 

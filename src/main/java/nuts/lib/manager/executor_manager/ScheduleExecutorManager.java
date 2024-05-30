@@ -55,11 +55,10 @@ public class ScheduleExecutorManager {
      *  }
      *  </pre>
      */
-    public void schedule(Runnable runnable, long millisTerms, String scheduleName) throws ExecutionException, InterruptedException {
+    public void schedule(Runnable runnable, long millisTerms, String scheduleName) {
         getScheduledExecutorService();
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, 0L, millisTerms, TimeUnit.MILLISECONDS);
-        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -81,11 +80,10 @@ public class ScheduleExecutorManager {
      * }
      * </pre>
      */
-    public void schedule(ExecutorManager executorManager, long millisTerms, String scheduleName) throws ExecutionException, InterruptedException {
+    public void schedule(ExecutorManager executorManager, long millisTerms, String scheduleName) {
         getScheduledExecutorService();
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, 0L, millisTerms, TimeUnit.MILLISECONDS);
-        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -110,12 +108,11 @@ public class ScheduleExecutorManager {
      * }
      * </pre>
      */
-    public void schedule(Runnable runnable, long millisTerms, long limitCount, String scheduleName) throws ExecutionException, InterruptedException {
+    public void schedule(Runnable runnable, long millisTerms, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), 0L, millisTerms, TimeUnit.MILLISECONDS);
-        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -136,12 +133,11 @@ public class ScheduleExecutorManager {
      * }
      * </pre>
      */
-    public void schedule(ExecutorManager executorManager, long millisTerms, long limitCount, String scheduleName) throws ExecutionException, InterruptedException {
+    public void schedule(ExecutorManager executorManager, long millisTerms, long limitCount, String scheduleName) {
         getScheduledExecutorService();
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), 0L, millisTerms, TimeUnit.MILLISECONDS);
-        scheduledFuture.get();
         scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
@@ -160,7 +156,8 @@ public class ScheduleExecutorManager {
         getScheduledExecutorService();
 
         long timeUntil = getTimeUntil(iterationTime);
-        scheduledExecutorService.scheduleAtFixedRate(runnable, timeUntil, 86400, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, timeUntil, 86400, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
     /**
@@ -175,7 +172,8 @@ public class ScheduleExecutorManager {
         getScheduledExecutorService();
 
         long timeUntil = getTimeUntil(iterationTime);
-        scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, timeUntil, 86400, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, timeUntil, 86400, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
 
@@ -194,7 +192,8 @@ public class ScheduleExecutorManager {
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         long timeUntil = getTimeUntil(iterationTime);
-        scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), timeUntil, 86400, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), timeUntil, 86400, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
     /**
@@ -210,7 +209,8 @@ public class ScheduleExecutorManager {
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         long timeUntil = getTimeUntil(iterationTime);
-        scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), timeUntil, 86400, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), timeUntil, 86400, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
 
@@ -228,7 +228,8 @@ public class ScheduleExecutorManager {
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         long timeUntil = getTimeUntil(startTime);
-        scheduledExecutorService.scheduleAtFixedRate(runnable, timeUntil, secondTerm, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(runnable, timeUntil, secondTerm, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
     /**
@@ -244,7 +245,8 @@ public class ScheduleExecutorManager {
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         long timeUntil = getTimeUntil(startTime);
-        scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, timeUntil, secondTerm, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(executorManager::execute, timeUntil, secondTerm, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
 
@@ -262,7 +264,8 @@ public class ScheduleExecutorManager {
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         long timeUntil = getTimeUntil(startTime);
-        scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), timeUntil, secondTerm, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(runnable, limitCount, scheduleName), timeUntil, secondTerm, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
     /**
@@ -278,7 +281,8 @@ public class ScheduleExecutorManager {
         scheduleLimitMap.put(scheduleName, new AtomicInteger(0));
 
         long timeUntil = getTimeUntil(startTime);
-        scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), timeUntil, secondTerm, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(limitCountProxy(executorManager, limitCount, scheduleName), timeUntil, secondTerm, TimeUnit.SECONDS);
+        scheduledFutureMap.put(scheduleName, scheduledFuture);
     }
 
 
