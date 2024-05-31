@@ -1,4 +1,4 @@
-package nuts.lib.manager.security_manager;
+package nuts.lib.manager.security_manager.strategy;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 

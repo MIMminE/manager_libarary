@@ -1,5 +1,7 @@
 package nuts.lib.manager.security_manager;
 
+import nuts.lib.manager.security_manager.custom.HttpSecurityCustomConfiguration;
+import nuts.lib.manager.security_manager.strategy.HttpSecurityStrategy;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 

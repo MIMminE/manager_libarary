@@ -1,5 +1,6 @@
-package nuts.lib.manager.security_manager;
+package nuts.lib.manager.security_manager.custom;
 
+import nuts.lib.manager.security_manager.strategy.HttpSecurityStrategy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import java.util.ArrayList;

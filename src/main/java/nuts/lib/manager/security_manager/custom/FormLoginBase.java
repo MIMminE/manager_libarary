@@ -2,10 +2,8 @@ package nuts.lib.manager.security_manager.custom;
 
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import nuts.lib.manager.security_manager.HttpSecurityCustomConfiguration;
-import nuts.lib.manager.security_manager.HttpSecurityStrategy;
+import nuts.lib.manager.security_manager.strategy.HttpSecurityStrategy;
 import nuts.lib.manager.security_manager.strategy.FormLogin;
 import nuts.lib.manager.security_manager.strategy.HttpBasic;
 
@@ -22,7 +20,6 @@ public class FormLoginBase extends HttpSecurityCustomConfiguration {
         return List.of(
                 FormLogin.enable,
                 HttpBasic.enable
-
         );
     }
 }
