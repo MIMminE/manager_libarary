@@ -1,8 +1,11 @@
 package nuts.lib.manager.security_manager.user.configurer;
 
+import lombok.Getter;
+
+@Getter
 public class UserTableInfoConfigurer {
-    String tableName;
-    String userNameField;
-    String passWordField;
-    String enabledField;
+    private String tableName;
+    private String userNameField;
+    private String passWordField;
+    private String enabledField;
 }
