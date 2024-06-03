@@ -12,27 +12,33 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class JdbcDetectManagerBuilder {
 
     public static JdbcDetectManagerBuilder builder = new JdbcDetectManagerBuilder();
-    JdbcDetectSourceConfigurer jdbcDetectSourceConfigurer = new JdbcDetectSourceConfigurer();
-    JdbcDetectionProcessorConfigurer jdbcDetectionProcessorConfigurer = new JdbcDetectionProcessorConfigurer();
-    JdbcPostProcessorConfigurer jdbcPostProcessorConfigurer = new JdbcPostProcessorConfigurer();
+    JdbcDetectSourceConfigurer jdbcDetectSourceConfigurer;
+    JdbcDetectionProcessorConfigurer jdbcDetectionProcessorConfigurer;
+    JdbcPostProcessorConfigurer jdbcPostProcessorConfigurer;
 
 
     public JdbcDetectManagerBuilder detectSource(Configurer<JdbcDetectSourceConfigurer> configurer) {
+        this.jdbcDetectSourceConfigurer = new JdbcDetectSourceConfigurer();
         configurer.config(jdbcDetectSourceConfigurer);
         return this;
     }
 
     public JdbcDetectManagerBuilder jdbcDetectionProcessor(Configurer<JdbcDetectionProcessorConfigurer> configurer) {
+        this.jdbcDetectionProcessorConfigurer = new JdbcDetectionProcessorConfigurer();
         configurer.config(jdbcDetectionProcessorConfigurer);
         return this;
     }
 
     public JdbcDetectManagerBuilder jdbcPostProcessor(Configurer<JdbcPostProcessorConfigurer> configurer) {
+        this.jdbcPostProcessorConfigurer = new JdbcPostProcessorConfigurer();
         configurer.config(jdbcPostProcessorConfigurer);
         return this;
     }
 
     public JdbcDetectionManager build(JdbcTemplate jdbcTemplate, int intervalMillis) {
+        if (jdbcDetectSourceConfigurer == null || jdbcDetectionProcessorConfigurer == null || jdbcPostProcessorConfigurer == null)
+            throw new IllegalStateException("detectSource, jdbcDetectionProcessor, jdbcPostProcessor are required.");
+
         return new JdbcDetectionManager(jdbcTemplate, jdbcDetectSourceConfigurer.jdbcDetectSource,
                 new JdbcDetectionProcessor(jdbcDetectionProcessorConfigurer.detectionProcessorPolicy),
                 new JdbcPostProcessor(jdbcPostProcessorConfigurer.postProcessorPolicy), intervalMillis);

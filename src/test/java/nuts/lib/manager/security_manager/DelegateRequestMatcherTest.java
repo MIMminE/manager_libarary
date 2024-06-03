@@ -1,9 +1,8 @@
 package nuts.lib.manager.security_manager;
 
+import nuts.lib.manager.security_manager.authorization.DelegateRequestMatcher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DelegateRequestMatcherTest {
 

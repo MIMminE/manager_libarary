@@ -1,5 +1,6 @@
 package nuts.lib.manager.detection_manager.jdbc_detection.builder;
 
+import lombok.Getter;
 import nuts.lib.manager.detection_manager.jdbc_detection.post_processor_policy.DefaultPostProcessorPolicy;
 import nuts.lib.manager.detection_manager.jdbc_detection.post_processor_policy.PostBatchDeletePolicy;
 import nuts.lib.manager.detection_manager.jdbc_detection.post_processor_policy.PostBatchUpdatePolicy;

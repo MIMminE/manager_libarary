@@ -1,5 +1,6 @@
 package nuts.lib.manager.detection_manager.jdbc_detection.builder;
 
+import lombok.Getter;
 import nuts.lib.manager.detection_manager.jdbc_detection.JdbcDetectSource;
 
 public class JdbcDetectSourceConfigurer {
