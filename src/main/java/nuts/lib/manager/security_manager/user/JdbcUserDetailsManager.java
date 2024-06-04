@@ -9,34 +9,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 
-import java.util.List;
-import java.util.Map;
-
 public class JdbcUserDetailsManager implements UserDetailsManager {
 
+    public static JdbcUserDetailsManagerBuilder builder = new JdbcUserDetailsManagerBuilder();
     private final JdbcTemplate jdbcTemplate;
-    private final UserTableInfoConfigurer userTableInfo;
-    private final AuthorityTableInfoConfigurer authorityTableInfo;
+    private final UserTableInfoConfigurer userTableInfoConfigurer;
+    private final AuthorityTableInfoConfigurer authorityTableInfoConfigurer;
 
 
-    public JdbcUserDetailsManager(JdbcTemplate jdbcTemplate, UserTableInfoConfigurer userTableInfo, AuthorityTableInfoConfigurer authorityTableInfo) {
+    JdbcUserDetailsManager(JdbcTemplate jdbcTemplate, UserTableInfoConfigurer userTableInfoConfigurer, AuthorityTableInfoConfigurer authorityTableInfoConfigurer) {
         this.jdbcTemplate = jdbcTemplate;
-        this.userTableInfo = userTableInfo;
-        this.authorityTableInfo = authorityTableInfo;
+        this.userTableInfoConfigurer = userTableInfoConfigurer;
+        this.authorityTableInfoConfigurer = authorityTableInfoConfigurer;
     }
 
     @Transactional
     @Override
     public void createUser(UserDetails user) {
 
-        String userTableName = userTableInfo.getTableName();
-        String userNameField = userTableInfo.getUserNameField();
-        String passWordField = userTableInfo.getPassWordField();
-        String enabledField = userTableInfo.getEnabledField();
+        String userTableName = userTableInfoConfigurer.getTableName();
+        String userNameField = userTableInfoConfigurer.getUserNameField();
+        String passWordField = userTableInfoConfigurer.getPassWordField();
+        String enabledField = userTableInfoConfigurer.getEnabledField();
 
-        String authorityTableName = authorityTableInfo.getAuthorityTableName();
-        String authorityTableUserNameField = authorityTableInfo.getUserNameField();
-        String authorityField = authorityTableInfo.getAuthorityField();
+        String authorityTableName = authorityTableInfoConfigurer.getAuthorityTableName();
+        String authorityTableUserNameField = authorityTableInfoConfigurer.getUserNameField();
+        String authorityField = authorityTableInfoConfigurer.getAuthorityField();
 
 
         if (!jdbcTemplate.queryForMap("SELECT %s from %s where %s = %s"
@@ -51,6 +49,7 @@ public class JdbcUserDetailsManager implements UserDetailsManager {
             throw new RuntimeException("This ID already exists.");
 
     }
+
 
     @Override
     public void updateUser(UserDetails user) {
