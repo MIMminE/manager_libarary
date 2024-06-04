@@ -19,8 +19,6 @@ public class AnnotationVerificationManager implements VerificationManager<Runtim
     @Override
     public RuntimeException getVerificationResult() {
         this.apply();
-
-
         return verificationResult.getResult();
     }
 

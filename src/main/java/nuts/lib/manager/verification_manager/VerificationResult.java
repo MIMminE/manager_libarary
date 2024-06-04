@@ -4,5 +4,5 @@ public interface VerificationResult<T> {
 
     T getResult();
 
-    void addResult(T result);
+    void addResult(T  result);
 }

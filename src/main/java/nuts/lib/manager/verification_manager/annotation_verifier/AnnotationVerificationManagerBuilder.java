@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 public class AnnotationVerificationManagerBuilder {
 
-    private final List<AnnotationVerifierConfigurer> annotationInstanceVerifierConfigurers = new ArrayList<>();
+    private List<AnnotationVerifierConfigurer> annotationInstanceVerifierConfigurers = new ArrayList<>();
     private Function<List<RuntimeException>, RuntimeException> resultProcessor;
 
     public AnnotationVerificationManagerBuilder verifier(Configurer<AnnotationVerifierConfigurer> configurer) {
@@ -18,11 +18,15 @@ public class AnnotationVerificationManagerBuilder {
         return this;
     }
 
+    public AnnotationVerificationManagerBuilder verifier(List<AnnotationVerifierConfigurer> annotationInstanceVerifierConfigurers){
+        this.annotationInstanceVerifierConfigurers = annotationInstanceVerifierConfigurers;
+        return this;
+    }
+
     public AnnotationVerificationManagerBuilder resultProcessor(Function<List<RuntimeException>, RuntimeException> resultProcessor) {
         this.resultProcessor = resultProcessor;
         return this;
     }
-
 
     public AnnotationVerificationManager build() {
         if (!annotationInstanceVerifierConfigurers.isEmpty() && resultProcessor != null) {
