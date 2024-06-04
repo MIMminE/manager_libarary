@@ -5,6 +5,11 @@ import nuts.lib.manager.verification_manager.Verifier;
 import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
+/**
+ * A class that checks whether the value of a field inside an instance is empty or not.
+ * <p>
+ * If the field with {@link Essential} annotations is empty, an exception is raised and sent to the manager.
+ */
 public class AnnotationVerifier implements Verifier<RuntimeException> {
     private final Object instance;
     private final RuntimeException suppliedRuntimeException;

@@ -6,6 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * This is a {@link AnnotationVerificationManager} builder class.
+ * <p>
+ * Set up a configuration instance to create each AnnotationVerifier and a Function instance to incorporate the exceptions from each instance.
+ *
+ * <pre>
+ * {@code
+ * VerificationManagerBuilder.annotationVerifierConfig.verifier(
+ *      config -> config.targetInstance(authorityTableInfoConfigurer)
+ *          .resultRuntimeException(new RuntimeException("authorityTableInfoConfigurer")))
+ *          .resultProcessor(exceptions -> {
+ *               String exceptionMessage = "The following settings are not fully met. | -> ";
+ *               for (RuntimeException exception : exceptions)
+ *                   exceptionMessage += exception.getMessage() + " ";
+ *               return new RuntimeException(exceptionMessage);
+ *           }
+ *   )
+ *       .build();
+ * }
+ * </pre>
+ *
+ * @author nuts
+ * @since 2024. 06. 04
+ */
 public class AnnotationVerificationManagerBuilder {
 
     private List<AnnotationVerifierConfigurer> annotationInstanceVerifierConfigurers = new ArrayList<>();
@@ -18,7 +42,7 @@ public class AnnotationVerificationManagerBuilder {
         return this;
     }
 
-    public AnnotationVerificationManagerBuilder verifier(List<AnnotationVerifierConfigurer> annotationInstanceVerifierConfigurers){
+    public AnnotationVerificationManagerBuilder verifier(List<AnnotationVerifierConfigurer> annotationInstanceVerifierConfigurers) {
         this.annotationInstanceVerifierConfigurers = annotationInstanceVerifierConfigurers;
         return this;
     }
