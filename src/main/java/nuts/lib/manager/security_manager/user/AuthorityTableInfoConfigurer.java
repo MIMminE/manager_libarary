@@ -1,18 +1,19 @@
-package nuts.lib.manager.security_manager.user.configurer;
+package nuts.lib.manager.security_manager.user;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import nuts.lib.manager.verification_manager.annotation_verifier.Essential;
 
-@Getter
+@Getter(AccessLevel.PACKAGE)
 public class AuthorityTableInfoConfigurer {
     @Essential
-    private String authorityTableName;
+    String authorityTableName;
 
     @Essential
-    private String userNameField;
+    String userNameField;
 
     @Essential
-    private String authorityField;
+    String authorityField;
 
     public AuthorityTableInfoConfigurer authorityTableName(String authorityTableName) {
         this.authorityTableName = authorityTableName;

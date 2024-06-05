@@ -1,29 +1,30 @@
 package nuts.lib.manager.security_manager.user;
 
-import jakarta.transaction.Transactional;
-import nuts.lib.manager.security_manager.user.configurer.AuthorityTableInfoConfigurer;
-import nuts.lib.manager.security_manager.user.configurer.UserTableInfoConfigurer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 public class JdbcUserDetailsManager implements UserDetailsManager {
 
     public static JdbcUserDetailsManagerBuilder builder = new JdbcUserDetailsManagerBuilder();
     private final JdbcTemplate jdbcTemplate;
+    private final TransactionTemplate transactionTemplate;
     private final UserTableInfoConfigurer userTableInfoConfigurer;
     private final AuthorityTableInfoConfigurer authorityTableInfoConfigurer;
+    private final PasswordEncoder passwordEncoder;
 
-
-    JdbcUserDetailsManager(JdbcTemplate jdbcTemplate, UserTableInfoConfigurer userTableInfoConfigurer, AuthorityTableInfoConfigurer authorityTableInfoConfigurer) {
+    public JdbcUserDetailsManager(JdbcTemplate jdbcTemplate, TransactionTemplate transactionTemplate, UserTableInfoConfigurer userTableInfoConfigurer, AuthorityTableInfoConfigurer authorityTableInfoConfigurer) {
         this.jdbcTemplate = jdbcTemplate;
+        this.transactionTemplate = transactionTemplate;
         this.userTableInfoConfigurer = userTableInfoConfigurer;
         this.authorityTableInfoConfigurer = authorityTableInfoConfigurer;
     }
 
-    @Transactional
     @Override
     public void createUser(UserDetails user) {
 
@@ -36,18 +37,27 @@ public class JdbcUserDetailsManager implements UserDetailsManager {
         String authorityTableUserNameField = authorityTableInfoConfigurer.getUserNameField();
         String authorityField = authorityTableInfoConfigurer.getAuthorityField();
 
+        transactionTemplate.execute(status ->
+                {
+                    boolean active = TransactionSynchronizationManager.isActualTransactionActive();
+                    System.out.println(active);
+                    if (jdbcTemplate.queryForList("SELECT %s from %s where %s = ?"
+                            .formatted(userNameField, userTableName, userNameField), user.getUsername()).isEmpty()) {
 
-        if (!jdbcTemplate.queryForMap("SELECT %s from %s where %s = %s"
-                .formatted(userNameField, userTableName, userNameField, user.getUsername())).isEmpty()) {
+                        jdbcTemplate.update("insert into %s (%s, %s, %s) VALUES (?, ?, ?)"
+                                        .formatted(userTableName, userNameField, passWordField, enabledField),
+                                user.getUsername(), user.getPassword(), user.isEnabled());
 
-            jdbcTemplate.execute("insert into %s (%s, %s, %s) VALUES (%s, %s, %s)".formatted(userTableName, userNameField, passWordField, enabledField, user.getPassword(), user.isEnabled()));
+                        for (GrantedAuthority authority : user.getAuthorities())
+                            jdbcTemplate.update("insert into %s (%s, %s) VALUES (?, ?)"
+                                            .formatted(authorityTableName, authorityTableUserNameField, authorityField),
+                                    user.getUsername(), authority.getAuthority());
 
-            for (GrantedAuthority authority : user.getAuthorities())
-                jdbcTemplate.execute("insert into %s (%s %s) VALUES (%s %s)".formatted(authorityTableName, authorityTableUserNameField, authorityField, user.getUsername(), authority.getAuthority()));
-
-        } else
-            throw new RuntimeException("This ID already exists.");
-
+                    } else
+                        throw new RuntimeException("This username already exists.");
+                    return null;
+                }
+        );
     }
 
 

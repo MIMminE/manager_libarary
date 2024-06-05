@@ -1,9 +1,10 @@
-package nuts.lib.manager.security_manager.user.configurer;
+package nuts.lib.manager.security_manager.user;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import nuts.lib.manager.verification_manager.annotation_verifier.Essential;
 
-@Getter
+@Getter(AccessLevel.PACKAGE)
 public class UserTableInfoConfigurer {
     @Essential
     private String tableName;

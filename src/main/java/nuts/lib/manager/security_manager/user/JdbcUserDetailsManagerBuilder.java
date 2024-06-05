@@ -2,9 +2,8 @@ package nuts.lib.manager.security_manager.user;
 
 import nuts.lib.commom.configurer.AnnotationVerificationBuilder;
 import nuts.lib.commom.infra.Configurer;
-import nuts.lib.manager.security_manager.user.configurer.AuthorityTableInfoConfigurer;
-import nuts.lib.manager.security_manager.user.configurer.UserTableInfoConfigurer;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -24,14 +23,14 @@ public class JdbcUserDetailsManagerBuilder extends AnnotationVerificationBuilder
         return this;
     }
 
-    public JdbcUserDetailsManager build(JdbcTemplate jdbcTemplate) {
+    public JdbcUserDetailsManager build(JdbcTemplate jdbcTemplate, TransactionTemplate transactionTemplate) {
         verify();
-        return new JdbcUserDetailsManager(jdbcTemplate, userTableInfoConfigurer, authorityTableInfoConfigurer);
+        return new JdbcUserDetailsManager(jdbcTemplate, transactionTemplate, userTableInfoConfigurer, authorityTableInfoConfigurer);
     }
 
-    public JdbcUserDetailsManager build(DataSource dataSource) {
+    public JdbcUserDetailsManager build(DataSource dataSource, TransactionTemplate transactionTemplate) {
         verify();
-        return new JdbcUserDetailsManager(new JdbcTemplate(dataSource), userTableInfoConfigurer, authorityTableInfoConfigurer);
+        return new JdbcUserDetailsManager(new JdbcTemplate(dataSource), transactionTemplate, userTableInfoConfigurer, authorityTableInfoConfigurer);
     }
 
     @Override
