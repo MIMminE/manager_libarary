@@ -1,4 +1,4 @@
-package nuts.lib.manager.security_manager.user;
+package nuts.lib.manager.security_manager.user.jdbc_user_manager;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +15,6 @@ public class UserTableInfoConfigurer {
     @Essential
     private String passWordField;
 
-    @Essential
     private String enabledField;
 
 
