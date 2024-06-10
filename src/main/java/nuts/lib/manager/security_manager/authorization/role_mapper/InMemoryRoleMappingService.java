@@ -1,4 +1,4 @@
-package nuts.lib.manager.security_manager.authorization.role_service;
+package nuts.lib.manager.security_manager.authorization.role_mapper;
 
 import java.util.HashMap;
 import java.util.Map;

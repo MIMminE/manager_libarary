@@ -1,6 +1,5 @@
-package nuts.lib.manager.security_manager.authorization.role_service.jdbc;
+package nuts.lib.manager.security_manager.authorization.role_mapper;
 
-import nuts.lib.manager.security_manager.authorization.role_service.RoleMappingService;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.HashMap;
@@ -10,13 +9,12 @@ import java.util.Map;
 
 public class JdbcBasedRoleMappingService implements RoleMappingService {
 
-    public static JdbcBasedRoleMappingServiceBuilder builder = new JdbcBasedRoleMappingServiceBuilder();
     private final JdbcTemplate jdbcTemplate;
     private final String tableName;
     private final String urlPattenField;
     private final String roleField;
 
-    JdbcBasedRoleMappingService(JdbcTemplate jdbcTemplate, String tableName, String urlPattenField, String roleField) {
+    public JdbcBasedRoleMappingService(JdbcTemplate jdbcTemplate, String tableName, String urlPattenField, String roleField) {
         this.jdbcTemplate = jdbcTemplate;
         this.tableName = tableName;
         this.urlPattenField = urlPattenField;

@@ -1,8 +1,10 @@
-package nuts.lib.manager.security_manager.authorization.role_service.jdbc;
+package nuts.lib.manager.security_manager.authorization.role_mapper;
 
+import lombok.Getter;
 import nuts.lib.manager.verification_manager.annotation_verifier.Essential;
 
-public class JdbcBasedRoleMapperConfigurer {
+@Getter
+public class JdbcBasedRoleMapperConfigurer{
 
     @Essential
     String tableName;
@@ -27,4 +29,5 @@ public class JdbcBasedRoleMapperConfigurer {
         this.roleField = roleField;
         return this;
     }
+
 }

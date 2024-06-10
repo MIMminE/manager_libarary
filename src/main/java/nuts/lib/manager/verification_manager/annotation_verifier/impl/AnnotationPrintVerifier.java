@@ -1,26 +1,36 @@
-package nuts.lib.manager.verification_manager.annotation_verifier;
+package nuts.lib.manager.verification_manager.annotation_verifier.impl;
 
-import nuts.lib.manager.verification_manager.Verifier;
+import nuts.lib.commom.configurer.AnnotationVerificationBuilder;
+import nuts.lib.manager.verification_manager.annotation_verifier.Essential;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
  * A class that checks whether the value of a field inside an instance is empty or not.
  * <p>
- * If the field with {@link Essential} annotations is empty, an exception is raised and sent to the manager.
+ * If the field with {@link Essential} annotations is empty, save the field name and send it to the manager.
+ * <p>
+ * It is used in {@link AnnotationVerificationBuilder}.
+ *
+ * @author nuts
+ * @since 2024. 06. 10
  */
-public class AnnotationVerifier implements Verifier<RuntimeException> {
+public class AnnotationPrintVerifier {
+
     private final Object instance;
     private final RuntimeException suppliedRuntimeException;
 
-    public AnnotationVerifier(Object instance, RuntimeException suppliedRuntimeException) {
+    public AnnotationPrintVerifier(Object instance, RuntimeException suppliedRuntimeException) {
         this.instance = instance;
         this.suppliedRuntimeException = suppliedRuntimeException;
     }
 
-    @Override
-    public boolean condition() {
+    public List<String> condition() {
+
+        List<String> results = new ArrayList<>();
 
         for (Field field : instance.getClass().getDeclaredFields()) {
             Essential annotation = field.getAnnotation(Essential.class);
@@ -33,14 +43,13 @@ public class AnnotationVerifier implements Verifier<RuntimeException> {
                     throw new RuntimeException(e);
                 }
                 if (fieldValue == null) {
-                    return false;
+                    results.add(field.getName());
                 }
             }
         }
-        return true;
+        return results;
     }
 
-    @Override
     public Supplier<RuntimeException> postProcessing() {
         return () -> suppliedRuntimeException;
     }

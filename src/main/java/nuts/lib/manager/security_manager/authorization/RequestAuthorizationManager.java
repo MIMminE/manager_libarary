@@ -1,6 +1,6 @@
 package nuts.lib.manager.security_manager.authorization;
 
-import nuts.lib.manager.security_manager.authorization.role_service.RoleMappingService;
+import nuts.lib.manager.security_manager.authorization.role_mapper.RoleMappingService;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -11,7 +11,9 @@ import org.springframework.security.web.util.matcher.RequestMatcherEntry;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CustomAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
+public class RequestAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
+
+    public static AuthorizationManagerBuilder builder = new AuthorizationManagerBuilder();
 
     static private final AuthorizationDecision DENY = new AuthorizationDecision(false);
     static private final AuthorizationDecision ADMIT = new AuthorizationDecision(true);
@@ -22,7 +24,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
     private AuthorizationDecision defaultDecision = DENY;
 
 
-    public CustomAuthorizationManager(DelegateRequestMatcher delegateRequestMatcher, RoleMappingService mappingService) {
+    public RequestAuthorizationManager(DelegateRequestMatcher delegateRequestMatcher, RoleMappingService mappingService) {
         this.delegateRequestMatcher = delegateRequestMatcher;
         this.mappingService = mappingService;
         this.mapping();

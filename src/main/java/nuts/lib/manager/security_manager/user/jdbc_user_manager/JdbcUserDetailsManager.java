@@ -1,5 +1,6 @@
 package nuts.lib.manager.security_manager.user.jdbc_user_manager;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.security_manager.crypto.PasswordEncoderSupplier;
 import nuts.lib.manager.security_manager.crypto.PasswordEncoderSupport;
@@ -16,13 +17,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.List;
 import java.util.Map;
 
-
 @Slf4j
 public class JdbcUserDetailsManager implements UserDetailsService {
 
     public static JdbcUserDetailsManagerBuilder builder = new JdbcUserDetailsManagerBuilder();
     protected final JdbcTemplate jdbcTemplate;
     protected final TransactionTemplate transactionTemplate;
+    @Getter
     protected final DelegatingPasswordEncoder passwordEncoder;
 
     // Custom Variable

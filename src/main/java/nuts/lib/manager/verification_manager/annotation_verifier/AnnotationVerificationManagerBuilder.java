@@ -1,6 +1,8 @@
 package nuts.lib.manager.verification_manager.annotation_verifier;
 
 import nuts.lib.commom.infra.Configurer;
+import nuts.lib.manager.verification_manager.annotation_verifier.impl.AnnotationPrintVerifier;
+import nuts.lib.manager.verification_manager.annotation_verifier.impl.AnnotationVerifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +56,15 @@ public class AnnotationVerificationManagerBuilder {
 
     public AnnotationVerificationManager build() {
         if (!annotationInstanceVerifierConfigurers.isEmpty() && resultProcessor != null) {
-            List<AnnotationVerifier> instanceVerifiers = annotationInstanceVerifierConfigurers.stream().map(this::createVerifier).toList();
+            List<AnnotationPrintVerifier> instanceVerifiers = annotationInstanceVerifierConfigurers.stream().map(this::createVerifier).toList();
 
             return new AnnotationVerificationManager(instanceVerifiers, this.createVerifierResult(resultProcessor));
         }
         throw new IllegalStateException("The settings are incorrect.");
     }
 
-    private AnnotationVerifier createVerifier(AnnotationVerifierConfigurer configurer) {
-        return new AnnotationVerifier(configurer.getTargetInstance(), configurer.getResultRuntimeException());
+    private AnnotationPrintVerifier createVerifier(AnnotationVerifierConfigurer configurer) {
+        return new AnnotationPrintVerifier(configurer.getTargetInstance(), configurer.getResultRuntimeException());
     }
 
     private AnnotationVerifierResult createVerifierResult(Function<List<RuntimeException>, RuntimeException> resultProcessor) {

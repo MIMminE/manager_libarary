@@ -2,6 +2,8 @@ package nuts.lib.manager.verification_manager.annotation_verifier;
 
 import nuts.lib.manager.verification_manager.VerificationManager;
 import nuts.lib.manager.verification_manager.Verifier;
+import nuts.lib.manager.verification_manager.annotation_verifier.impl.AnnotationPrintVerifier;
+import nuts.lib.manager.verification_manager.annotation_verifier.impl.AnnotationVerifier;
 
 import java.util.List;
 
@@ -21,11 +23,11 @@ import java.util.List;
 
 public class AnnotationVerificationManager implements VerificationManager<RuntimeException> {
 
-    List<AnnotationVerifier> verifiers;
+    List<AnnotationPrintVerifier> verifiers;
 
     AnnotationVerifierResult verificationResult;
 
-    public AnnotationVerificationManager(List<AnnotationVerifier> verifiers, AnnotationVerifierResult verificationResult) {
+    public AnnotationVerificationManager(List<AnnotationPrintVerifier> verifiers, AnnotationVerifierResult verificationResult) {
         this.verifiers = verifiers;
         this.verificationResult = verificationResult;
     }
@@ -37,9 +39,15 @@ public class AnnotationVerificationManager implements VerificationManager<Runtim
     }
 
     private void apply() {
-        for (Verifier<RuntimeException> verifier : verifiers) {
-            if (!verifier.condition())
-                verificationResult.addResult(verifier.postProcessing().get());
+        for (AnnotationPrintVerifier verifier : verifiers) {
+            List<String> verifierResult = verifier.condition();
+
+            if (!verifierResult.isEmpty()) {
+
+                String resultString = " Required Fields " + verifierResult;
+
+                verificationResult.addResult(new RuntimeException(verifier.postProcessing().get().getMessage() + resultString));
+            }
         }
     }
 }
