@@ -32,9 +32,10 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'nuts'
-            artifactId = 'project-lib'
-            version = '0.1'
-            artifact jar
+            artifactId = 'spring_provision_lib'
+            version = '1.0'
+
+            from components.java
         }
     }
 }
@@ -50,16 +51,7 @@ ext {
 
 dependencies {
 
-
-
-
-//    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
-//    implementation 'com.amazonaws:aws-java-sdk-s3'
-
-//    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-    api ('io.jsonwebtoken:jjwt-api:0.12.5')
-
-//    api 'io.jsonwebtoken:jjwt-api:0.12.5'
+    api('io.jsonwebtoken:jjwt-api:0.12.5')
     api 'io.jsonwebtoken:jjwt-impl:0.12.5'
     api 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
@@ -73,11 +65,9 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-artemis'
     implementation 'org.springframework.boot:spring-boot-starter-activemq'
-    testImplementation 'org.springframework.security:spring-security-test'
 
     // Spring RestDocs
-    api 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    implementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // Jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
