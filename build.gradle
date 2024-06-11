@@ -2,6 +2,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     id 'java'
+    id 'java-library'
     id 'org.springframework.boot' version '3.2.5' apply(false)
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
@@ -45,9 +46,22 @@ repositories {
 ext {
     set('snippetsDir', file("build/generated-snippets"))
 }
+
+
 dependencies {
-    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
-    implementation 'com.amazonaws:aws-java-sdk-s3'
+
+
+
+
+//    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
+//    implementation 'com.amazonaws:aws-java-sdk-s3'
+
+//    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    api ('io.jsonwebtoken:jjwt-api:0.12.5')
+
+//    api 'io.jsonwebtoken:jjwt-api:0.12.5'
+    api 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    api 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -62,7 +76,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     // Spring RestDocs
-    implementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    api 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // Jpa
@@ -81,8 +95,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     // FixtureMonkey
-    implementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'
-    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'
+    api 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'
+//    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14'
 
     implementation group: 'org.apache.activemq', name: 'artemis-server', version: '2.31.2'
 }

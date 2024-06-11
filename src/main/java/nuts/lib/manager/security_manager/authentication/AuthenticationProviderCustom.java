@@ -27,7 +27,6 @@ public class AuthenticationProviderCustom implements AuthenticationProvider {
             System.out.println("bad!!");
             throw new BadCredentialsException("Bad Credential!");
         }
-        System.out.println("SSS");
         return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), null, userDetails.getAuthorities());
     }
 
