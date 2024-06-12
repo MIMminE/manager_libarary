@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class PrevisionAuthenticationToken extends AbstractAuthenticationToken {
 
-    public PrevisionAuthenticationToken(Collection<? extends GrantedAuthority> authorities) {
+    public PrevisionAuthenticationToken(String jwtToken, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
     }
 

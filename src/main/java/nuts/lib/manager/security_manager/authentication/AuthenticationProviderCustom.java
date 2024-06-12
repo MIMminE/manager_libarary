@@ -1,7 +1,7 @@
 package nuts.lib.manager.security_manager.authentication;
 
 import lombok.RequiredArgsConstructor;
-import nuts.lib.manager.security_manager.user.jdbc_user_manager.JdbcUserDetailsManager;
+import nuts.lib.manager.security_manager.user.jdbc.user_manager.JdbcUserDetailsManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,9 +1,11 @@
 package nuts.lib.manager.security_manager.authentication.jwt;
 
 import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import nuts.lib.commom.infra.Configurer;
+import nuts.lib.manager.security_manager.authentication.TokenRepository;
 
 public class JwtTokenServiceBuilder {
 
@@ -23,11 +25,15 @@ public class JwtTokenServiceBuilder {
     }
 
 
-    public JwtTokenService build() {
+    public JwtTokenService build(TokenRepository tokenRepository) {
         JwtBuilder jwtBuilder = Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor("hellokeyhellokeyhellokeyhellokeyhellokey".getBytes()), Jwts.SIG.HS256);
 
-        return new JwtTokenService(jwtBuilder);
+        JwtParser jwtParser = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor("hellokeyhellokeyhellokeyhellokeyhellokey".getBytes()))
+                .build();
+
+        return new JwtTokenService(jwtBuilder, jwtParser, tokenRepository);
     }
 
 }

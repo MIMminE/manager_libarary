@@ -2,8 +2,8 @@ package nuts.lib.manager.security_manager;
 
 import nuts.lib.manager.security_manager.authorization.AuthorizationManagerBuilder;
 import nuts.lib.manager.security_manager.authorization.RequestAuthorizationManager;
-import nuts.lib.manager.security_manager.user.jdbc_user_manager.JdbcUserDetailsManager;
-import nuts.lib.manager.security_manager.user.jdbc_user_manager.JdbcUserDetailsManagerBuilder;
+import nuts.lib.manager.security_manager.user.jdbc.user_manager.JdbcUserDetailsManager;
+import nuts.lib.manager.security_manager.user.jdbc.user_manager.JdbcUserDetailsManagerBuilder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authorization.AuthorizationManager;

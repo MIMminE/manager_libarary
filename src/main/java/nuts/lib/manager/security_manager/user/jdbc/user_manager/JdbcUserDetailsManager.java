@@ -1,4 +1,4 @@
-package nuts.lib.manager.security_manager.user.jdbc_user_manager;
+package nuts.lib.manager.security_manager.user.jdbc.user_manager;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
