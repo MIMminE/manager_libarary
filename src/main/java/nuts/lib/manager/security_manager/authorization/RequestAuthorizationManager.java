@@ -1,9 +1,12 @@
 package nuts.lib.manager.security_manager.authorization;
 
-import nuts.lib.manager.security_manager.authorization.role_mapper.RoleMappingService;
+import nuts.lib.manager.security_manager.authorization.builder.RequestAuthorizationManagerBuilder;
+import nuts.lib.manager.security_manager.authorization.mapper.RoleMappingService;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcherEntry;
@@ -11,20 +14,30 @@ import org.springframework.security.web.util.matcher.RequestMatcherEntry;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * Spring Security Accreditation Manager.
+ * <p>
+ * Map the required permissions for the URL request.
+ * <p>
+ * A Mapping service is provided in various ways through the {@link RoleMappingService} interface implementation.
+ *
+ * @creation 2024. 06. 13
+ */
+
 public class RequestAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
-    public static AuthorizationManagerBuilder builder = new AuthorizationManagerBuilder();
+    public static RequestAuthorizationManagerBuilder builder = new RequestAuthorizationManagerBuilder();
 
     static private final AuthorizationDecision DENY = new AuthorizationDecision(false);
     static private final AuthorizationDecision ADMIT = new AuthorizationDecision(true);
 
     List<RequestMatcherEntry<AuthorizationManager<RequestAuthorizationContext>>> mappings;
-    private final DelegateRequestMatcher delegateRequestMatcher;
+    private final RequestMatcherDelegator delegateRequestMatcher;
     private final RoleMappingService mappingService;
     private AuthorizationDecision defaultDecision = DENY;
 
 
-    public RequestAuthorizationManager(DelegateRequestMatcher delegateRequestMatcher, RoleMappingService mappingService) {
+    public RequestAuthorizationManager(RequestMatcherDelegator delegateRequestMatcher, RoleMappingService mappingService) {
         this.delegateRequestMatcher = delegateRequestMatcher;
         this.mappingService = mappingService;
         this.mapping();
@@ -48,7 +61,14 @@ public class RequestAuthorizationManager implements AuthorizationManager<Request
     private void mapping() {
         mappings = mappingService.getRoleMappings().entrySet().stream()
                 .map(entry -> new RequestMatcherEntry<>(delegateRequestMatcher.mvcRequestMatcher(entry.getKey()),
-                        AuthorizationManagerProvider.getManager(entry.getValue()))).toList();
+                        getManager(entry.getValue()))).toList();
     }
 
+    private AuthorizationManager<RequestAuthorizationContext> getManager(String role) {
+        if (role != null) {
+            if (role.startsWith("ROLE")) return AuthorityAuthorizationManager.hasAuthority(role);
+            else return new WebExpressionAuthorizationManager(role);
+        }
+        throw new IllegalArgumentException("The wording of the permission setting is incorrect.");
+    }
 }

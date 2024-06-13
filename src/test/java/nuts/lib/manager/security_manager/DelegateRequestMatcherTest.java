@@ -1,12 +1,12 @@
 package nuts.lib.manager.security_manager;
 
-import nuts.lib.manager.security_manager.authorization.DelegateRequestMatcher;
+import nuts.lib.manager.security_manager.authorization.RequestMatcherDelegator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class DelegateRequestMatcherTest {
 
-    private DelegateRequestMatcher delegateRequestMatcher = new DelegateRequestMatcher(null);
+    private RequestMatcherDelegator delegateRequestMatcher = new RequestMatcherDelegator(null);
 
     @DisplayName("")
     @Test

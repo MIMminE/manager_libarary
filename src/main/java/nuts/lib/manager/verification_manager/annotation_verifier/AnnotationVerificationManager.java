@@ -1,9 +1,7 @@
 package nuts.lib.manager.verification_manager.annotation_verifier;
 
 import nuts.lib.manager.verification_manager.VerificationManager;
-import nuts.lib.manager.verification_manager.Verifier;
-import nuts.lib.manager.verification_manager.annotation_verifier.impl.AnnotationPrintVerifier;
-import nuts.lib.manager.verification_manager.annotation_verifier.impl.AnnotationVerifier;
+import nuts.lib.manager.verification_manager.annotation_verifier.builder.AnnotationVerificationManagerBuilder;
 
 import java.util.List;
 
@@ -17,8 +15,7 @@ import java.util.List;
  * <p>
  * You can use the {@link AnnotationVerificationManagerBuilder} class to easily do the whole setup.
  *
- * @author nuts
- * @since 2024. 06. 04
+ * @creation 2024. 06. 04
  */
 
 public class AnnotationVerificationManager implements VerificationManager<RuntimeException> {

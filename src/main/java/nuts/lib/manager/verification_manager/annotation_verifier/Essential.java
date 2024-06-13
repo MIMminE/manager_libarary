@@ -10,8 +10,7 @@ import java.lang.annotation.Target;
  * <p>
  * If the builder class implements AnnotationVerificationBuilder, it will throw an exception during the build process.
  *
- * @author nuts
- * @since 2024. 06. 04
+ * @creation 2024. 06. 04
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

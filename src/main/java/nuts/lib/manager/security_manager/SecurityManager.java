@@ -1,9 +1,9 @@
 package nuts.lib.manager.security_manager;
 
-import nuts.lib.manager.security_manager.authorization.AuthorizationManagerBuilder;
+import nuts.lib.manager.security_manager.authorization.builder.RequestAuthorizationManagerBuilder;
 import nuts.lib.manager.security_manager.authorization.RequestAuthorizationManager;
-import nuts.lib.manager.security_manager.user.jdbc.user_manager.JdbcUserDetailsManager;
-import nuts.lib.manager.security_manager.user.jdbc.user_manager.JdbcUserDetailsManagerBuilder;
+import nuts.lib.manager.security_manager.user.jdbc.JdbcUserDetailsManager;
+import nuts.lib.manager.security_manager.user.jdbc.builder.JdbcUserDetailsManagerBuilder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -42,7 +42,7 @@ public class SecurityManager {
         return new SecurityManager(httpSecurity);
     }
 
-    public static AuthorizationManagerBuilder authorizationManagerBuilder = RequestAuthorizationManager.builder;
+    public static RequestAuthorizationManagerBuilder authorizationManagerBuilder = RequestAuthorizationManager.builder;
     public static JdbcUserDetailsManagerBuilder jdbcUserDetailsManagerBuilder = JdbcUserDetailsManager.builder;
 
     private final HttpSecurity httpSecurity;

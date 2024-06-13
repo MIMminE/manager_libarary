@@ -2,7 +2,7 @@ package nuts.lib.manager.detection_manager.jdbc_detection.builder;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import nuts.lib.commom.infra.Configurer;
+import nuts.lib.commom.configurer.Configurer;
 import nuts.lib.manager.detection_manager.jdbc_detection.JdbcDetectionManager;
 import nuts.lib.manager.detection_manager.jdbc_detection.JdbcDetectionProcessor;
 import nuts.lib.manager.detection_manager.jdbc_detection.JdbcPostProcessor;

@@ -1,8 +1,8 @@
 package nuts.lib.commom.configurer;
 
-import nuts.lib.manager.verification_manager.VerificationManagerBuilder;
 import nuts.lib.manager.verification_manager.annotation_verifier.AnnotationVerificationManager;
-import nuts.lib.manager.verification_manager.annotation_verifier.AnnotationVerifierConfigurer;
+import nuts.lib.manager.verification_manager.annotation_verifier.builder.AnnotationVerificationManagerBuilder;
+import nuts.lib.manager.verification_manager.annotation_verifier.builder.AnnotationVerifierConfigurer;
 
 import java.util.List;
 import java.util.Map;
@@ -68,6 +68,7 @@ public abstract class AnnotationVerificationBuilder {
 
     protected abstract Supplier<Map<Object, String>> setVerification();
 
+
     protected void createVerificationManager(Map<Object, String> verificationMap) {
 
         List<AnnotationVerifierConfigurer> verifierConfigurers = verificationMap.entrySet().stream().map(e ->
@@ -82,7 +83,7 @@ public abstract class AnnotationVerificationBuilder {
         };
 
 
-        this.verificationManager = VerificationManagerBuilder.annotationVerifierConfig
+        this.verificationManager = new AnnotationVerificationManagerBuilder()
                 .verifier(verifierConfigurers).resultProcessor(resultProcessor).build();
     }
 }
