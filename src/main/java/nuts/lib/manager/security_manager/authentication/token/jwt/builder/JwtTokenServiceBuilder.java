@@ -8,6 +8,7 @@ import nuts.lib.commom.configurer.Configurer;
 import nuts.lib.commom.configurer.RequiredVerificationBuilder;
 import nuts.lib.manager.security_manager.authentication.token.TokenRepository;
 import nuts.lib.manager.security_manager.authentication.token.jwt.JwtTokenService;
+import nuts.lib.manager.security_manager.authentication.token.jwt.token_repository.JdbcTokenRepository;
 import nuts.lib.manager.security_manager.authentication.token.jwt.token_repository.JdbcTokenRepositoryBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -27,7 +28,9 @@ public class JwtTokenServiceBuilder extends RequiredVerificationBuilder {
     public JwtTokenServiceBuilder jdbcTokenRepository(Configurer<JdbcTokenRepositoryBuilder> configure, JdbcTemplate jdbcTemplate, TransactionTemplate transactionTemplate) {
         JdbcTokenRepositoryBuilder jdbcTokenRepositoryBuilder = new JdbcTokenRepositoryBuilder();
         configure.config(jdbcTokenRepositoryBuilder);
-        this.tokenRepository = jdbcTokenRepositoryBuilder.build(jdbcTemplate, transactionTemplate);
+        jdbcTokenRepositoryBuilder.verify();
+        this.tokenRepository = new JdbcTokenRepository(jdbcTokenRepositoryBuilder.getTokenTableConfigurer(),
+                jdbcTokenRepositoryBuilder.getTokenAuthorityTableConfigurer(), jdbcTemplate, transactionTemplate);
         return this;
     }
 

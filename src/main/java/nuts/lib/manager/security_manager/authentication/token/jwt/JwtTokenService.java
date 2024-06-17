@@ -11,6 +11,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
+/**
+ * TODO
+ */
 public class JwtTokenService {
 
     private final JwtBuilder jwtBuilder;

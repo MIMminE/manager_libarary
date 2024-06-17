@@ -58,7 +58,7 @@ public abstract class JdbcUserDetailsManagerTableConfigurer {
          * Default settings. The table should be created in advance.
          */
         public static AuthorityTableConfigurer withDefault() {
-            return new AuthorityTableConfigurer(AUTHORITY_TABLE_NAME, USER_TABLE_NAME, AUTHORITY_FIELD);
+            return new AuthorityTableConfigurer(AUTHORITY_TABLE_NAME, USER_NAME_FILED, AUTHORITY_FIELD);
         }
 
         String authorityTableName;

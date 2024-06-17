@@ -38,5 +38,4 @@ public class RedisSessionManager {
         return new SessionRepositoryFilter<>(redisSessionRepository);
     }
 
-
 }

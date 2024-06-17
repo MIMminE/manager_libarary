@@ -11,6 +11,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public JwtAuthenticationToken(String jwtToken) {
         super(null);
         this.jwtToken = jwtToken;
+
         super.setAuthenticated(false);
     }
 
@@ -20,7 +21,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true);
     }
 
-
     public static JwtAuthenticationToken unauthenticated(String jwtToken) {
         return new JwtAuthenticationToken(jwtToken);
     }
@@ -29,7 +29,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         return new JwtAuthenticationToken(jwtToken, authorities);
     }
 
-
     @Override
     public Object getCredentials() {
         return jwtToken;
@@ -37,6 +36,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return jwtToken;
     }
 }

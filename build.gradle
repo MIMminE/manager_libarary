@@ -30,7 +30,7 @@ dependencyManagement {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             groupId = 'nuts'
             artifactId = 'spring_provision_lib'
             version = '1.0'
@@ -51,7 +51,7 @@ ext {
 
 dependencies {
 
-    api('io.jsonwebtoken:jjwt-api:0.12.5')
+    api 'io.jsonwebtoken:jjwt-api:0.12.5'
     api 'io.jsonwebtoken:jjwt-impl:0.12.5'
     api 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
@@ -72,14 +72,14 @@ dependencies {
     // Jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // Test
+//    // Test
     implementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-jdbc'
     implementation 'org.springframework.session:spring-session-data-redis'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.amqp:spring-rabbit-test'
-    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.amqp:spring-rabbit-test'
+    implementation 'org.springframework.kafka:spring-kafka-test'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'

@@ -1,5 +1,6 @@
 package nuts.lib.manager.security_manager.authentication.token.jwt.builder;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JwtClaimSource {
+
+    public static JwtClaimSource builder = new JwtClaimSource();
 
     private String issuer;
     private String subject;

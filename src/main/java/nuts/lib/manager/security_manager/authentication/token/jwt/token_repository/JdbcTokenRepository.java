@@ -61,9 +61,9 @@ public class JdbcTokenRepository implements TokenRepository {
 
     @Override
     public List<? extends GrantedAuthority> getAuthorities(String token) {
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT Meta.*, Authority.* FROM %s Meta INNER JOIN %s Authority ON Meta.%s = Authority.%s WHERE Meta.%s = ?"
-                .formatted(tokenTableInformation.getTokenTableName(), tokenAuthorityTableInformation.getTokenAuthorityTableName(),
-                        tokenTableInformation.getTokenFieldName(), tokenTableInformation.getTokenFieldName(), tokenTableInformation.getTokenFieldName()), token);
+        System.out.println(token);
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT %s FROM %s WHERE %s = ?"
+                .formatted(tokenAuthorityTableInformation.getTokenAuthorityFieldName(), tokenAuthorityTableInformation.getTokenAuthorityTableName(), tokenTableInformation.getTokenFieldName()), token);
 
         return maps.stream().map(e ->
                 new SimpleGrantedAuthority(e.get(tokenAuthorityTableInformation.tokenAuthorityFieldName).toString())).toList();
