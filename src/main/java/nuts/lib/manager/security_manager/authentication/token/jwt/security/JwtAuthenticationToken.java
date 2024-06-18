@@ -1,4 +1,4 @@
-package nuts.lib.manager.security_manager.authentication.token.jwt;
+package nuts.lib.manager.security_manager.authentication.token.jwt.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package nuts.lib.manager.security_manager.authentication.token;
+package nuts.lib.manager.security_manager.authentication.token.jwt.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;

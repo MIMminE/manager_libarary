@@ -51,12 +51,11 @@ ext {
 
 dependencies {
 
-    api 'io.jsonwebtoken:jjwt-api:0.12.5'
-    api 'io.jsonwebtoken:jjwt-impl:0.12.5'
-    api 'io.jsonwebtoken:jjwt-jackson:0.12.5'
-
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.40'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -84,6 +83,7 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
