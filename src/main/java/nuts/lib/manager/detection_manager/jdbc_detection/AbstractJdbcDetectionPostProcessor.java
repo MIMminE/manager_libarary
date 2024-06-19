@@ -8,7 +8,11 @@ import java.util.Map;
 
 public abstract class AbstractJdbcDetectionPostProcessor implements DetectionPostProcessor<Map<String, Object>> {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public AbstractJdbcDetectionPostProcessor(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void process(List<Map<String, Object>> detectedObjects) {

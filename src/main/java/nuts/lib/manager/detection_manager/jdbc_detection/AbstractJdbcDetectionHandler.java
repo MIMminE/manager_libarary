@@ -7,5 +7,9 @@ import java.util.Map;
 
 public abstract class AbstractJdbcDetectionHandler implements DetectionHandler<Map<String, Object>> {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public AbstractJdbcDetectionHandler(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 }

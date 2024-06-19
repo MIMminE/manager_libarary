@@ -8,7 +8,11 @@ import java.util.Map;
 
 public abstract class AbstractJdbcDetectionSource implements DetectionSource<Map<String, Object>> {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public AbstractJdbcDetectionSource(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public List<Map<String, Object>> poll() {
