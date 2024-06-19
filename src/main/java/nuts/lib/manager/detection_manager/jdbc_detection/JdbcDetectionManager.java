@@ -2,35 +2,68 @@ package nuts.lib.manager.detection_manager.jdbc_detection;
 
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class JdbcDetectionManager {
-    private final ScheduleExecutorManager scheduleExecutorManager = new ScheduleExecutorManager(ExecutorBuilder.newSingleThreadScheduledExecutor("detect_manager"));
-    private final JdbcDetectSource detectSource;
-    private final JdbcDetectionProcessor detectionProcessor;
-    private final JdbcPostProcessor postProcessor;
-    private final long intervalMillis;
+    private final AbstractJdbcDetectionSource detectionSource;
+    private final AbstractJdbcDetectionHandler detectionHandler;
+    private final AbstractJdbcDetectionPostProcessor detectionPostProcessor;
+    private final ScheduleExecutorManager scheduleExecutorManager;
+    private final TransactionTemplate transactionTemplate;
+    private final long intervalMills;
+    private final String scheduleName;
 
-    public JdbcDetectionManager(JdbcTemplate jdbcTemplate, JdbcDetectSource detectSource, JdbcDetectionProcessor detectionProcessor, JdbcPostProcessor postProcessor, long intervalMillis) {
-        this.detectSource = detectSource;
-        this.postProcessor = postProcessor;
-        this.detectionProcessor = detectionProcessor;
-        this.intervalMillis = intervalMillis;
-        this.detectSource.setJdbcTemplate(jdbcTemplate);
-        this.detectionProcessor.setJdbcTemplate(jdbcTemplate);
-        this.postProcessor.setJdbcTemplate(jdbcTemplate);
+    public JdbcDetectionManager(AbstractJdbcDetectionSource detectionSource, AbstractJdbcDetectionHandler detectionHandler,
+                                AbstractJdbcDetectionPostProcessor detectionPostProcessor, TransactionTemplate transactionTemplate, long intervalMills) {
+        this.detectionSource = detectionSource;
+        this.detectionHandler = detectionHandler;
+        this.detectionPostProcessor = detectionPostProcessor;
+        this.scheduleExecutorManager = new ScheduleExecutorManager(ExecutorBuilder.newSingleThreadScheduledExecutor("jdbc_detection_manager"));
+        this.transactionTemplate = transactionTemplate;
+        this.intervalMills = intervalMills;
+        this.scheduleName = "none";
     }
 
-    @Transactional
+    public JdbcDetectionManager(AbstractJdbcDetectionSource detectionSource, AbstractJdbcDetectionHandler detectionHandler,
+                                AbstractJdbcDetectionPostProcessor detectionPostProcessor, ScheduleExecutorManager scheduleExecutorManager,
+                                TransactionTemplate transactionTemplate, long intervalMills) {
+        this.detectionSource = detectionSource;
+        this.detectionHandler = detectionHandler;
+        this.detectionPostProcessor = detectionPostProcessor;
+        this.scheduleExecutorManager = scheduleExecutorManager;
+        this.transactionTemplate = transactionTemplate;
+        this.intervalMills = intervalMills;
+        this.scheduleName = "none";
+    }
+
+    public JdbcDetectionManager(AbstractJdbcDetectionSource detectionSource, AbstractJdbcDetectionHandler detectionHandler,
+                                AbstractJdbcDetectionPostProcessor detectionPostProcessor, ScheduleExecutorManager scheduleExecutorManager,
+                                TransactionTemplate transactionTemplate, long intervalMills, String scheduleName) {
+        this.detectionSource = detectionSource;
+        this.detectionHandler = detectionHandler;
+        this.detectionPostProcessor = detectionPostProcessor;
+        this.scheduleExecutorManager = scheduleExecutorManager;
+        this.transactionTemplate = transactionTemplate;
+        this.intervalMills = intervalMills;
+        this.scheduleName = scheduleName;
+    }
+
     public void run() throws ExecutionException, InterruptedException {
         scheduleExecutorManager.schedule(() -> {
-            List<Map<String, Object>> processed = detectionProcessor.process(detectSource.poll());
-            postProcessor.process(processed);
-        }, intervalMillis, "jdbc monitoring");
+            transactionTemplate.execute(status -> {
+
+                List<Map<String, Object>> poll = detectionSource.poll();
+
+                detectionHandler.process(poll);
+
+                detectionPostProcessor.process(poll);
+
+                return null;
+            });
+        }, intervalMills, scheduleName);
     }
 }

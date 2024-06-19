@@ -2,7 +2,7 @@ package nuts.lib.manager.detection_manager;
 
 import java.util.List;
 
-public interface DetectSource<T> {
+public interface DetectionSource<T> {
 
     List<T> poll();
 
