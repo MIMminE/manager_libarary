@@ -21,8 +21,9 @@ public abstract class AbstractJdbcDetectionPostProcessor implements DetectionPos
     }
 
     /**
-     * The return of the getDetectionQuery method should return the SQL Select query string,
-     * and the query action determines that it has detected the retrieved data.
+     * Define the subsequent processing of detected and processed data.
+     * As a return value, you need to return an array of SQL strings for subsequent processing,
+     * and this is done in batches.
      *
      * @since 2024. 06. 19
      */
