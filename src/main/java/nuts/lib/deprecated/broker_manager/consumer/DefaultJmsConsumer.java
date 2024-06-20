@@ -1,13 +1,13 @@
-package nuts.lib.manager.broker_manager.jms.consumer;
+package nuts.lib.deprecated.broker_manager.consumer;
 
 import jakarta.jms.Message;
-import nuts.lib.manager.broker_manager.jms.config.JmsConsumerConfig;
 import nuts.lib.manager.executor_manager.ExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
 import org.springframework.jms.core.JmsTemplate;
 
 import java.util.function.Consumer;
 
+@Deprecated(since = "2024. 06. 20")
 public class DefaultJmsConsumer extends JmsConsumer {
 
     public DefaultJmsConsumer(JmsTemplate jmsTemplate, JmsConsumerConfig config) {

@@ -1,13 +1,14 @@
-package nuts.lib.manager.broker_manager;
+package nuts.lib.deprecated.broker_manager;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Consumer;
 
 /**
  * This is the interface for the client implementation of the message broker server.
  * Among other types of brokers, it provides implementations for RabbitMQ, ActiveMQ, and Kafka.
  * <p>
  * Implementations to refer to
- * {@link nuts.lib.manager.broker_manager.jms.JmsManager}
+ * {@link JmsManager}
  *
  * @param <MP>  Enter a class type that acts as a producer to send broker-specific messages.
  * @param <MPC> Enter the configuration class type of the producer for each broker.
@@ -16,14 +17,15 @@ import java.lang.reflect.InvocationTargetException;
  * @author nuts
  * @since 2024. 05. 27
  */
+@Deprecated(since = "2024. 06. 20")
 public interface BrokerManager<
-        MP extends MessageProducer<?>,
-        MPC extends ProducerConfig<MP>,
-        MC extends MessageConsumer<?>,
-        MCC extends ConsumerConfig<MC>> {
+        MP extends BrokerManager.MessageProducer<?>,
+        MPC extends BrokerManager.ProducerConfig<MP>,
+        MC extends BrokerManager.MessageConsumer<?>,
+        MCC extends BrokerManager.ConsumerConfig<MC>> {
 
     /**
-     * Returns an instance of the Producer class that the BrokerManager creates and forwards.
+     * Returns an instance of the BrokerProducer class that the BrokerManager creates and forwards.
      * The second argument is to enter the meta information of the actual implementation class for each broker.
      * <p>
      * It uses the reflection function to dynamically create instances, and exceptions are required accordingly
@@ -37,4 +39,26 @@ public interface BrokerManager<
      * It uses the reflection function to dynamically create instances, and exceptions are required accordingly
      */
     <MCI extends MC> MCI getConsumer(MCC config, Class<MCI> consumerClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+
+    abstract class ConsumerConfig<MC> {
+    }
+
+    abstract class MessageConsumer<M> {
+
+        public M syncReceive() {
+            return null;
+        }
+
+        public void asyncReceive(Consumer<M> callback) {
+        }
+    }
+
+    abstract class MessageProducer<M> {
+
+        public void send(M message) {
+        }
+    }
+
+    abstract class ProducerConfig<MP> {
+    }
 }
