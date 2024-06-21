@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 @Slf4j
 abstract class AbstractActiveMqConsumer implements BrokerConsumer<Message> {
     private String poolName = "activemq_consumer";
-    private ExecutorManager consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(1, poolName));
+    private ExecutorManager consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(20, poolName));
     private volatile boolean interrupted = false;
     private Thread workerThread;
     protected Consumer<Message> callback;
@@ -29,24 +29,26 @@ abstract class AbstractActiveMqConsumer implements BrokerConsumer<Message> {
     @Override
     public synchronized void receive() {
         if (workerThread == null) {
-            consumerExecutor.submit(() -> {
-                try {
-                    while (!interrupted) {
-                        workerThread = Thread.currentThread();
-                        Message receive = jmsTemplate.receive(destination);
-                        callback.accept(receive);
-                        debugLogPrint(receive);
+            for (int i = 0; i < 5; i++){
+
+                consumerExecutor.submit(() -> {
+                    try {
+                        while (!interrupted) {
+                            workerThread = Thread.currentThread();
+                            Message receive = jmsTemplate.receive(destination);
+                            callback.accept(receive);
+                            debugLogPrint(receive);
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        if (interrupted) {
+                            log.info("activemq_consumer interrupted , pool_name : {} ", poolName);
+                            interrupted = true;
+                            workerThread = null;
+                        }
                     }
-                } catch (Exception e) {
-                    System.out.println(e);
-                    if (interrupted) {
-                        log.info("activemq_consumer interrupted , pool_name : {} ", poolName);
-                        interrupted = true;
-                        workerThread = null;
-                    }
-                    System.out.println("esesds");
-                }
-            });
+                });
+            }
         } else
             throw new RuntimeException("It's already working.");
     }
