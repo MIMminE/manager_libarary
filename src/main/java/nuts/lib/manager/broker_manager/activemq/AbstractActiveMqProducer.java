@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.broker_manager.BrokerProducer;
 import org.springframework.jms.core.JmsTemplate;
 
+import java.util.List;
+
 @Slf4j
 public abstract class AbstractActiveMqProducer implements BrokerProducer<Object> {
 
@@ -18,6 +20,7 @@ public abstract class AbstractActiveMqProducer implements BrokerProducer<Object>
     @Override
     public void send(Object message) {
         jmsTemplate.convertAndSend(destination, message);
+
         debugLogPrint(message);
     }
 

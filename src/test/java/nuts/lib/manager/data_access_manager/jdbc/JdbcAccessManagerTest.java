@@ -5,11 +5,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import nuts.lib.manager.data_access_manager.DataSourceGenerator;
 import nuts.lib.manager.data_access_manager.DataSourceType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 
 class JdbcAccessManagerTest {
@@ -22,11 +25,11 @@ class JdbcAccessManagerTest {
 
         JdbcAccessManager jdbcAccessManager = new JdbcAccessManager(hikariDataSource);
         JdbcDataInjector jdbcDataInjector = new JdbcDataInjector(new JdbcTemplate(hikariDataSource));
-        jdbcDataInjector.dataSampleInject("db1_tmp_table1", TestClass.class, 20000);
+        jdbcDataInjector.dataSampleInject("db1_tmp_table1", TestClass.class, 30000);
     }
 
     @Data
-    static public class TestClass{
+    static public class TestClass {
         @Size(min = 3, max = 50)
         String value;
 
@@ -47,4 +50,25 @@ class JdbcAccessManagerTest {
         int int_value2;
 
     }
+
+
+    @Test
+    void test1() {
+
+        HikariDataSource hikariDataSource = DataSourceGenerator.createHikariDataSource(DataSourceType.mysql, "localhost", 9000, "test_db", "tester", "tester");
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(hikariDataSource);
+
+        jdbcTemplate.setFetchSize(1);
+
+        long start = System.nanoTime();
+
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from db1_tmp_table1");
+
+        System.out.println(maps);
+        long endTime = System.nanoTime();
+        System.out.println(endTime - start);
+
+    }
+
+
 }

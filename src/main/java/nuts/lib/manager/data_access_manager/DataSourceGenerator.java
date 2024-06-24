@@ -14,6 +14,7 @@ public abstract class DataSourceGenerator {
         String dateSourceUrl = dataSourceType.getUrlFormat().formatted(host, port, dbName);
 
         HikariConfig config = createHikariConfig(dataSourceType, userName, password, dateSourceUrl);
+//        +"?useCursorFetch=true"
 
         return new HikariDataSource(config);
     }

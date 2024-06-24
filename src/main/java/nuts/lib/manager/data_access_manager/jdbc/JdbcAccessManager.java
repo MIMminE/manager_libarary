@@ -17,6 +17,11 @@ public class JdbcAccessManager {
 
     private final JdbcTemplate jdbcTemplate;
 
+    public JdbcAccessManager fetchSize(int fetchSize){
+        this.jdbcTemplate.setFetchSize(fetchSize);
+        return this;
+    }
+
     public JdbcAccessManager(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -41,6 +46,7 @@ public class JdbcAccessManager {
         return jdbcTemplate.queryForList(sql, elementType);
     }
 
+
     public int insert(String sql, Object... args) {
         return this.update(sql, args);
     }
@@ -53,6 +59,13 @@ public class JdbcAccessManager {
 
     public int[] insertBatch(String... sqls) {
         return this.updateBatch(sqls);
+    }
+
+    public int[] insertBatch(String tableName, List<Map<String, Object>> dataList){
+
+        List<String> stringList = dataList.stream().map(e -> createDynamicInsert2(tableName, e).toString()).toList();
+        return insertBatch(stringList.toArray(String[]::new));
+
     }
 
     public int update(String sql, Object... args) {
@@ -95,4 +108,35 @@ public class JdbcAccessManager {
         sql.append(" WHERE ").append(whereCondition);
         return sql;
     }
+
+
+    private StringBuilder createDynamicInsert2(String tableName, Map<String, Object> data) {
+        StringBuilder sql = new StringBuilder("INSERT INTO ").append(tableName).append(" (");
+
+        for (String column : data.keySet()) {
+            sql.append(column).append(", ");
+        }
+        sql.setLength(sql.length() - 2);
+        sql.append(") VALUES (");
+
+        for (Object value : data.values()) {
+            sql.append(convertToSqlValue(value)).append(", ");
+        }
+        sql.setLength(sql.length() - 2);
+        sql.append(")");
+        return sql;
+    }
+
+    private String convertToSqlValue(Object value) {
+        if (value == null) {
+            return "NULL";
+        } else if (value instanceof String || value instanceof Character) {
+            return "'" + value.toString().replace("'", "''") + "'";
+        } else if (value instanceof Boolean) {
+            return ((Boolean) value) ? "TRUE" : "FALSE";
+        } else {
+            return value.toString();
+        }
+    }
+
 }

@@ -29,7 +29,7 @@ abstract class AbstractActiveMqConsumer implements BrokerConsumer<Message> {
     @Override
     public synchronized void receive() {
         if (workerThread == null) {
-            for (int i = 0; i < 5; i++){
+            for (int i = 0; i < 1; i++){
 
                 consumerExecutor.submit(() -> {
                     try {
