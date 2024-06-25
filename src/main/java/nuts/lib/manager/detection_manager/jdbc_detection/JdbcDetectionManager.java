@@ -81,7 +81,6 @@ public class JdbcDetectionManager {
         scheduleExecutorManager.schedule(() -> {
             transactionTemplate.execute(status -> {
                 List<Map<String, Object>> poll = detectionSource.poll();
-                System.out.println(poll.size());
                 if (!poll.isEmpty()) {
                     log.debug("detect -> {}", poll);
                     detectionHandler.process(poll);
