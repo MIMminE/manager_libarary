@@ -19,6 +19,14 @@ public abstract class AbstractJdbcDetectionHandler implements DetectionHandler<M
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     private final JdbcTemplate jdbcTemplate;
+    private AbstractJdbcDetectionPostProcessor postProcessor;
+
+    public void initPostProcessor(AbstractJdbcDetectionPostProcessor postProcessor) {
+        this.postProcessor = postProcessor;
+    }
+
+    protected void runPostProcessor(List<Map<String, Object>> objectList) {
+        postProcessor.process(objectList);
+    }
 }

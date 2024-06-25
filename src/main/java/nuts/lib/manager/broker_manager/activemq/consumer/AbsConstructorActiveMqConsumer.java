@@ -10,4 +10,9 @@ public abstract class AbsConstructorActiveMqConsumer extends AbstractActiveMqCon
         super(jmsTemplate, destination, poolName);
         super.callback = callback;
     }
+
+    public AbsConstructorActiveMqConsumer(JmsTemplate jmsTemplate, String destination, Consumer<Message> callback, String poolName, int nThread) {
+        super(jmsTemplate, destination, poolName, nThread);
+        super.callback = callback;
+    }
 }

@@ -11,25 +11,38 @@ import java.util.function.Consumer;
 
 @Slf4j
 abstract class AbstractActiveMqConsumer implements BrokerConsumer<Message> {
-    private String poolName = "activemq_consumer";
-    private ExecutorManager consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(20, poolName));
-    private volatile boolean interrupted = false;
-    private Thread workerThread;
-    protected Consumer<Message> callback;
-
+    private final ExecutorManager consumerExecutor;
     private final JmsTemplate jmsTemplate;
     private final String destination;
+    private final int nThread;
+    private final String poolName;
+    private volatile boolean interrupted = false;
+    private Thread workerThread;
+
+    protected Consumer<Message> callback;
 
     public AbstractActiveMqConsumer(JmsTemplate jmsTemplate, String destination, String poolName) {
         this.jmsTemplate = jmsTemplate;
         this.destination = destination;
+        this.nThread = 1;
         this.poolName = poolName;
+        this.consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(1, poolName));
     }
+
+    public AbstractActiveMqConsumer(JmsTemplate jmsTemplate, String destination, String poolName, int nThread) {
+        this.jmsTemplate = jmsTemplate;
+        this.destination = destination;
+        this.nThread = nThread;
+        this.poolName = poolName;
+        this.consumerExecutor = new ExecutorManager(ExecutorBuilder.newFixedExecutor(nThread, poolName));
+    }
+
 
     @Override
     public synchronized void receive() {
         if (workerThread == null) {
-            for (int i = 0; i < 1; i++){
+            log.debug("activemq_consumer start (PoolName : {}, MaxThread : {})", poolName, nThread);
+            for (int i = 0; i < nThread; i++) {
 
                 consumerExecutor.submit(() -> {
                     try {

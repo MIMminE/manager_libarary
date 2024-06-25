@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.broker_manager.BrokerProducer;
 import org.springframework.jms.core.JmsTemplate;
 
-import java.util.List;
 
 @Slf4j
 public abstract class AbstractActiveMqProducer implements BrokerProducer<Object> {

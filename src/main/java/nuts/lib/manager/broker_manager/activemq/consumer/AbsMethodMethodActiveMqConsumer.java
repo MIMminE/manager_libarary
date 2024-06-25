@@ -11,5 +11,10 @@ public abstract class AbsMethodMethodActiveMqConsumer extends AbstractActiveMqCo
         super.callback = getCallback();
     }
 
+    public AbsMethodMethodActiveMqConsumer(JmsTemplate jmsTemplate, String destination, String poolName, int nThread) {
+        super(jmsTemplate, destination, poolName, nThread);
+        super.callback = getCallback();
+    }
+
     protected abstract Consumer<Message> getCallback();
 }

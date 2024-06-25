@@ -1,5 +1,7 @@
 package nuts.lib.manager.data_access_manager.jdbc;
 
+import nuts.lib.manager.data_access_manager.jdbc.db_module.DatabaseQueryModule;
+import nuts.lib.manager.data_access_manager.jdbc.db_module.SupportQueryModule;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -16,18 +18,16 @@ public class JdbcAccessManager {
     //TODO 조인, 정렬, 페이징 관련 기능 추가 필요
 
     private final JdbcTemplate jdbcTemplate;
+    private final DatabaseQueryModule queryModule;
 
-    public JdbcAccessManager fetchSize(int fetchSize){
-        this.jdbcTemplate.setFetchSize(fetchSize);
-        return this;
-    }
-
-    public JdbcAccessManager(DataSource dataSource) {
+    public JdbcAccessManager(DataSource dataSource, SupportQueryModule queryModule) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.queryModule = queryModule.getDatabaseQueryModule();
     }
 
-    public JdbcAccessManager(JdbcTemplate jdbcTemplate) {
+    public JdbcAccessManager(JdbcTemplate jdbcTemplate, SupportQueryModule queryModule) {
         this.jdbcTemplate = jdbcTemplate;
+        this.queryModule = queryModule.getDatabaseQueryModule();
     }
 
     public List<Map<String, Object>> select(String sql, Object... args) {
@@ -61,7 +61,7 @@ public class JdbcAccessManager {
         return this.updateBatch(sqls);
     }
 
-    public int[] insertBatch(String tableName, List<Map<String, Object>> dataList){
+    public int[] insertBatch(String tableName, List<Map<String, Object>> dataList) {
 
         List<String> stringList = dataList.stream().map(e -> createDynamicInsert2(tableName, e).toString()).toList();
         return insertBatch(stringList.toArray(String[]::new));
@@ -80,6 +80,17 @@ public class JdbcAccessManager {
 
     public int[] updateBatch(String... sqls) {
         return jdbcTemplate.batchUpdate(sqls);
+    }
+
+    public int upsert(String tableName, String key, Map<String, Object> data) {
+        String sql = queryModule.upsertQuery(tableName, key, data);
+        return jdbcTemplate.update(sql);
+    }
+
+    public int[] upsertBatch(String tableName, String key, List<Map<String, Object>> dataList) {
+        List<String> sqlList = dataList.stream().map(e -> queryModule.upsertQuery(tableName, key, e)).toList();
+        return jdbcTemplate.batchUpdate(sqlList.toArray(String[]::new));
+
     }
 
     private StringBuilder createDynamicInsert(String tableName, Map<String, Object> data) {

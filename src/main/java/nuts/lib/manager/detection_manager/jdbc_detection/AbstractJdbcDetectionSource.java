@@ -21,6 +21,7 @@ public abstract class AbstractJdbcDetectionSource implements DetectionSource<Map
 
     @Override
     public List<Map<String, Object>> poll() {
+        System.out.println(getDetectionQuery());
         return jdbcTemplate.queryForList(getDetectionQuery());
     }
 

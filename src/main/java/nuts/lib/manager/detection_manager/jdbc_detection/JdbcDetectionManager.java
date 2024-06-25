@@ -35,6 +35,7 @@ public class JdbcDetectionManager {
     public JdbcDetectionManager(AbstractJdbcDetectionSource detectionSource, AbstractJdbcDetectionHandler detectionHandler,
                                 AbstractJdbcDetectionPostProcessor detectionPostProcessor, TransactionTemplate transactionTemplate, long intervalMills) {
         this.detectionSource = detectionSource;
+        detectionHandler.initPostProcessor(detectionPostProcessor);
         this.detectionHandler = detectionHandler;
         this.detectionPostProcessor = detectionPostProcessor;
         this.scheduleExecutorManager = new ScheduleExecutorManager(ExecutorBuilder.newSingleThreadScheduledExecutor("jdbc_detection_manager"));
@@ -47,6 +48,7 @@ public class JdbcDetectionManager {
                                 AbstractJdbcDetectionPostProcessor detectionPostProcessor, ScheduleExecutorManager scheduleExecutorManager,
                                 TransactionTemplate transactionTemplate, long intervalMills) {
         this.detectionSource = detectionSource;
+        detectionHandler.initPostProcessor(detectionPostProcessor);
         this.detectionHandler = detectionHandler;
         this.detectionPostProcessor = detectionPostProcessor;
         this.scheduleExecutorManager = scheduleExecutorManager;
@@ -59,6 +61,7 @@ public class JdbcDetectionManager {
                                 AbstractJdbcDetectionPostProcessor detectionPostProcessor, ScheduleExecutorManager scheduleExecutorManager,
                                 TransactionTemplate transactionTemplate, long intervalMills, String scheduleName) {
         this.detectionSource = detectionSource;
+        detectionHandler.initPostProcessor(detectionPostProcessor);
         this.detectionHandler = detectionHandler;
         this.detectionPostProcessor = detectionPostProcessor;
         this.scheduleExecutorManager = scheduleExecutorManager;
@@ -78,11 +81,11 @@ public class JdbcDetectionManager {
         scheduleExecutorManager.schedule(() -> {
             transactionTemplate.execute(status -> {
 
-                List<Map<String, Object>> poll = detectionSource.poll();
+                List<Map<String, Object>> poll = detectionSource.poll(); // 여기에서 select ...  FOR UPDATE 문 실행
+                System.out.println(poll.size());
                 if (!poll.isEmpty()) {
                     log.debug("detect -> {}", poll);
                     detectionHandler.process(poll);
-                    detectionPostProcessor.process(poll);
                 }
 
                 return null;

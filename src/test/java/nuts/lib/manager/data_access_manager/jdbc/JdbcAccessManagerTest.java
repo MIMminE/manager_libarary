@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import nuts.lib.manager.data_access_manager.DataSourceGenerator;
 import nuts.lib.manager.data_access_manager.DataSourceType;
+import nuts.lib.manager.data_access_manager.jdbc.db_module.SupportQueryModule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,9 +24,9 @@ class JdbcAccessManagerTest {
         HikariDataSource hikariDataSource = DataSourceGenerator.createHikariDataSource(DataSourceType.mysql, "localhost", 9000, "test_db", "tester", "tester");
 
 
-        JdbcAccessManager jdbcAccessManager = new JdbcAccessManager(hikariDataSource);
+        JdbcAccessManager jdbcAccessManager = new JdbcAccessManager(hikariDataSource, SupportQueryModule.MYSQL);
         JdbcDataInjector jdbcDataInjector = new JdbcDataInjector(new JdbcTemplate(hikariDataSource));
-        jdbcDataInjector.dataSampleInject("db1_tmp_table1", TestClass.class, 30000);
+        jdbcDataInjector.dataSampleInject("db1_tmp_table1", TestClass.class, 15000);
     }
 
     @Data

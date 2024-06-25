@@ -1,14 +1,19 @@
 package nuts.lib.manager.detection_manager.jdbc_detection;
 
+import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.detection_manager.DetectionPostProcessor;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+@Slf4j
 public abstract class AbstractJdbcDetectionPostProcessor implements DetectionPostProcessor<Map<String, Object>> {
 
     private final JdbcTemplate jdbcTemplate;
+
 
     public AbstractJdbcDetectionPostProcessor(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -18,6 +23,8 @@ public abstract class AbstractJdbcDetectionPostProcessor implements DetectionPos
     public void process(List<Map<String, Object>> detectedObjects) {
 
         jdbcTemplate.batchUpdate(getPostProcessingQuery(detectedObjects));
+        log.debug("DetectionPostProcessor run : size: {}", detectedObjects.size());
+
     }
 
     /**
