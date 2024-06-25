@@ -19,7 +19,6 @@ public abstract class AbstractActiveMqProducer implements BrokerProducer<Object>
     @Override
     public void send(Object message) {
         jmsTemplate.convertAndSend(destination, message);
-
         debugLogPrint(message);
     }
 

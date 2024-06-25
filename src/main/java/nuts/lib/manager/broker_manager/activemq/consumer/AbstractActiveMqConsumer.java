@@ -53,7 +53,6 @@ abstract class AbstractActiveMqConsumer implements BrokerConsumer<Message> {
                             debugLogPrint(receive);
                         }
                     } catch (Exception e) {
-                        System.out.println(e);
                         if (interrupted) {
                             log.info("activemq_consumer interrupted , pool_name : {} ", poolName);
                             interrupted = true;

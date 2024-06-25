@@ -56,6 +56,7 @@ public class JmsBeanGenerator {
      * but it does not guarantee the remnants of distributed systems such as replicas.
      * That is done through the server settings
      */
+    @Deprecated
     public static ActiveMQConnectionFactory ActiveMqConnectionFactoryWithHA(ActiveMqHaEndpointConfig[] configs, String userName, String password) {
 
         TransportConfiguration[] configurations = Arrays.stream(configs).map(c -> {

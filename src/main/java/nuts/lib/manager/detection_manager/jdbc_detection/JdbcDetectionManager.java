@@ -80,8 +80,7 @@ public class JdbcDetectionManager {
     public void run() throws ExecutionException, InterruptedException {
         scheduleExecutorManager.schedule(() -> {
             transactionTemplate.execute(status -> {
-
-                List<Map<String, Object>> poll = detectionSource.poll(); // 여기에서 select ...  FOR UPDATE 문 실행
+                List<Map<String, Object>> poll = detectionSource.poll();
                 System.out.println(poll.size());
                 if (!poll.isEmpty()) {
                     log.debug("detect -> {}", poll);
