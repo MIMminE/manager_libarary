@@ -1,5 +1,6 @@
 package nuts.lib.manager.detection_manager.jdbc_detection;
 
+import lombok.Getter;
 import nuts.lib.manager.detection_manager.DetectionSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -8,6 +9,7 @@ import java.util.Map;
 
 public abstract class AbstractJdbcDetectionSource implements DetectionSource<Map<String, Object>> {
 
+    @Getter
     private final JdbcTemplate jdbcTemplate;
 
     public AbstractJdbcDetectionSource(JdbcTemplate jdbcTemplate) {

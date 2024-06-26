@@ -1,5 +1,6 @@
 package nuts.lib.manager.detection_manager.jdbc_detection;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
@@ -24,13 +25,13 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class JdbcDetectionManager {
-    private final AbstractJdbcDetectionSource detectionSource;
-    private final AbstractJdbcDetectionHandler detectionHandler;
-    private final AbstractJdbcDetectionPostProcessor detectionPostProcessor;
-    private final ScheduleExecutorManager scheduleExecutorManager;
-    private final TransactionTemplate transactionTemplate;
-    private final long intervalMills;
-    private final String scheduleName;
+    protected final AbstractJdbcDetectionSource detectionSource;
+    protected final AbstractJdbcDetectionHandler detectionHandler;
+    protected final AbstractJdbcDetectionPostProcessor detectionPostProcessor;
+    protected final ScheduleExecutorManager scheduleExecutorManager;
+    protected final TransactionTemplate transactionTemplate;
+    protected final long intervalMills;
+    protected final String scheduleName;
 
     public JdbcDetectionManager(AbstractJdbcDetectionSource detectionSource, AbstractJdbcDetectionHandler detectionHandler,
                                 AbstractJdbcDetectionPostProcessor detectionPostProcessor, TransactionTemplate transactionTemplate, long intervalMills) {
@@ -90,4 +91,6 @@ public class JdbcDetectionManager {
             });
         }, intervalMills, scheduleName);
     }
+
+
 }

@@ -1,5 +1,7 @@
 package nuts.lib.manager.executor_manager;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.function.Supplier;
  * @author nuts
  * @since 2024. 05. 23
  */
+@Slf4j
 public class ScheduleExecutorManager {
 
     private ScheduledExecutorService scheduledExecutorService;
@@ -64,8 +67,8 @@ public class ScheduleExecutorManager {
             public void run() {
                 try {
                     runnable.run();
-                } catch (Exception e){
-                    System.out.println(Thread.currentThread().getName() + " " + e);
+                } catch (Exception e) {
+                    log.debug(e.getMessage());
                 }
 
             }
