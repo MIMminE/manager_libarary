@@ -1,5 +1,6 @@
 package nuts.lib.manager.data_access_manager.jdbc.db_module;
 
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -33,7 +34,7 @@ public class MysqlModule implements DatabaseQueryModule {
     }
 
     private static String formatValue(Object value) {
-        if (value instanceof String) {
+        if (value instanceof String || value instanceof Timestamp) {
             return "'" + value.toString().replace("'", "''") + "'";
         } else if (value == null) {
             return "NULL";

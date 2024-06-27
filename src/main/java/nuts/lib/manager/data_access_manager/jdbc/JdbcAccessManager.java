@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +90,7 @@ public class JdbcAccessManager {
 
     public int[] upsertBatch(String tableName, String key, List<Map<String, Object>> dataList) {
         List<String> sqlList = dataList.stream().map(e -> queryModule.upsertQuery(tableName, key, e)).toList();
+        System.out.println(sqlList.get(0));
         return jdbcTemplate.batchUpdate(sqlList.toArray(String[]::new));
 
     }

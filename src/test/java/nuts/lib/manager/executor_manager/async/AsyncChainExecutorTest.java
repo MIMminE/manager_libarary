@@ -1,5 +1,6 @@
 package nuts.lib.manager.executor_manager.async;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -7,9 +8,17 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class AsyncChainExecutorTest {
+
+    @Test
+    void cf_test() {
+        TesterCF<Object> objectTesterCF = new TesterCF<>();
+
+        System.out.println(objectTesterCF.isCancelled() + " " + objectTesterCF.getWorkStatus());
+        System.out.println(objectTesterCF.isDone());
+
+    }
 
     @Test
     void test() throws ExecutionException, InterruptedException {

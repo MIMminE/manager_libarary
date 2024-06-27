@@ -1,6 +1,5 @@
 package nuts.lib.manager.detection_manager.jdbc_detection;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;

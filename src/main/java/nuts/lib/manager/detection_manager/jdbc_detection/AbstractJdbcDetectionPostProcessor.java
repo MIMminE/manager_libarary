@@ -22,8 +22,8 @@ public abstract class AbstractJdbcDetectionPostProcessor implements DetectionPos
     @Override
     public void process(List<Map<String, Object>> detectedObjects) {
 
-        jdbcTemplate.batchUpdate(getPostProcessingQuery(detectedObjects));
-        log.debug("DetectionPostProcessor run : size: {}", detectedObjects.size());
+        int[] ints = jdbcTemplate.batchUpdate(getPostProcessingQuery(detectedObjects));
+        log.debug("DetectionPostProcessor run : size: {} ,{}", ints.length, detectedObjects.size());
 
     }
 

@@ -16,10 +16,6 @@ public abstract class AbstractJdbcDetectionSource implements DetectionSource<Map
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public AbstractJdbcDetectionSource fetchSize(int fetchSize) {
-        this.jdbcTemplate.setFetchSize(fetchSize);
-        return this;
-    }
 
     @Override
     public List<Map<String, Object>> poll() {

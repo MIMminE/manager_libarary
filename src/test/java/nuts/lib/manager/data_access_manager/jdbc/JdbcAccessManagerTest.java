@@ -26,7 +26,7 @@ class JdbcAccessManagerTest {
 
         JdbcAccessManager jdbcAccessManager = new JdbcAccessManager(hikariDataSource, SupportQueryModule.MYSQL);
         JdbcDataInjector jdbcDataInjector = new JdbcDataInjector(new JdbcTemplate(hikariDataSource));
-        jdbcDataInjector.dataSampleInject("db1_tmp_table1", TestClass.class, 15000);
+        jdbcDataInjector.dataSampleInject("db1_tmp_table1", TestClass.class, 30000);
     }
 
     @Data
