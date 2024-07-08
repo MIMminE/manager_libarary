@@ -1,20 +1,14 @@
 package nuts.lib.manager.restdocs_manager;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import nuts.lib.manager.restdocs_manager.annotation.RestDocsHolder;
-import nuts.lib.manager.restdocs_manager.annotation.RestDocsSnippet;
-import nuts.lib.manager.restdocs_manager.expression.FieldDescription;
-import org.springframework.http.MediaType;
+import nuts.lib.manager.restdocs_manager.domain.annotation.RestDocsHolder;
+import nuts.lib.manager.restdocs_manager.domain.annotation.RestDocsSnippet;
+import nuts.lib.manager.restdocs_manager.domain.RestDocsFactory;
+import nuts.lib.manager.restdocs_manager.domain.expression.FieldDescription;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.*;
 

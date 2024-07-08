@@ -1,4 +1,4 @@
-package nuts.lib.manager.restdocs_manager.expression.child;
+package nuts.lib.manager.restdocs_manager.domain.expression.child;
 
 import org.springframework.restdocs.payload.FieldDescriptor;
 

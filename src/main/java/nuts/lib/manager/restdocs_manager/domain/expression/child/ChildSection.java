@@ -1,6 +1,4 @@
-package nuts.lib.manager.restdocs_manager.expression;
-
-import nuts.lib.manager.restdocs_manager.expression.child.ChildSection;
+package nuts.lib.manager.restdocs_manager.domain.expression.child;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,9 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface FieldDescription {
-    String name();
-    String description();
+public @interface ChildSection {
+    String name() default "";
+    String description() default "";
     boolean optional() default false;
-    ChildSection[] subSections() default @ChildSection;
+
 }

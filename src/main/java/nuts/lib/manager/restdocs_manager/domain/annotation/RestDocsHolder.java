@@ -1,4 +1,4 @@
-package nuts.lib.manager.restdocs_manager.annotation;
+package nuts.lib.manager.restdocs_manager.domain.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

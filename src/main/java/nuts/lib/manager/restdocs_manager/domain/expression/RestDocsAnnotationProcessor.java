@@ -1,6 +1,6 @@
-package nuts.lib.manager.restdocs_manager.expression;
+package nuts.lib.manager.restdocs_manager.domain.expression;
 
-import nuts.lib.manager.restdocs_manager.expression.child.RestDocsChildDescriptionProcessor;
+import nuts.lib.manager.restdocs_manager.domain.expression.child.RestDocsChildDescriptionProcessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 import java.lang.annotation.Annotation;

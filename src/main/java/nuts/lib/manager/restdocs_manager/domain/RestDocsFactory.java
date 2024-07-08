@@ -1,4 +1,4 @@
-package nuts.lib.manager.restdocs_manager;
+package nuts.lib.manager.restdocs_manager.domain;
 
 import lombok.Setter;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;

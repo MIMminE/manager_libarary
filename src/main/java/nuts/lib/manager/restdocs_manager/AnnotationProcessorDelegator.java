@@ -2,10 +2,10 @@ package nuts.lib.manager.restdocs_manager;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import nuts.lib.manager.restdocs_manager.expression.RestDocsAnnotationProcessor;
-import nuts.lib.manager.restdocs_manager.expression.FieldDescriptionProcessor;
-import nuts.lib.manager.restdocs_manager.expression.child.RestDocsChildDescriptionProcessor;
-import nuts.lib.manager.restdocs_manager.expression.child.ChildSectionProcessor;
+import nuts.lib.manager.restdocs_manager.domain.expression.RestDocsAnnotationProcessor;
+import nuts.lib.manager.restdocs_manager.domain.expression.FieldDescriptionProcessor;
+import nuts.lib.manager.restdocs_manager.domain.expression.child.RestDocsChildDescriptionProcessor;
+import nuts.lib.manager.restdocs_manager.domain.expression.child.ChildSectionProcessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 import java.lang.annotation.Annotation;

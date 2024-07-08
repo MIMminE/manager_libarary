@@ -1,8 +1,8 @@
-package nuts.lib.manager.restdocs_manager.expression;
+package nuts.lib.manager.restdocs_manager.domain.expression;
 
 import lombok.RequiredArgsConstructor;
-import nuts.lib.manager.restdocs_manager.expression.child.RestDocsChildDescriptionProcessor;
-import nuts.lib.manager.restdocs_manager.expression.child.ChildSection;
+import nuts.lib.manager.restdocs_manager.domain.expression.child.RestDocsChildDescriptionProcessor;
+import nuts.lib.manager.restdocs_manager.domain.expression.child.ChildSection;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 
