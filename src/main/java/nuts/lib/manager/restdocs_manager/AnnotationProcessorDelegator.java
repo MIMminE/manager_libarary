@@ -2,15 +2,21 @@ package nuts.lib.manager.restdocs_manager;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import nuts.lib.manager.restdocs_manager.docs_snippet.RestDocsAnnotationProcessor;
-import nuts.lib.manager.restdocs_manager.docs_snippet.processor.ExpressionFieldProcessor;
-import nuts.lib.manager.restdocs_manager.sub_section.SubSectionProcessor;
-import nuts.lib.manager.restdocs_manager.sub_section.processor.ExpressionSubSectionProcessor;
+import nuts.lib.manager.restdocs_manager.expression.RestDocsAnnotationProcessor;
+import nuts.lib.manager.restdocs_manager.expression.FieldDescriptionProcessor;
+import nuts.lib.manager.restdocs_manager.expression.child.RestDocsChildDescriptionProcessor;
+import nuts.lib.manager.restdocs_manager.expression.child.ChildSectionProcessor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+/**
+ * It is designed to be used with the addition of multiple types of annotation processors.
+ * You can extend its functionality by adding newly defined annotations and processors to this delegator class.
+ *
+ * @since 2024. 07. 08
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AnnotationProcessorDelegator {
 
@@ -22,8 +28,8 @@ public class AnnotationProcessorDelegator {
         else return annotationProcessorDelegator;
     }
 
-    private final List<RestDocsAnnotationProcessor> annotationProcessors = List.of(new ExpressionFieldProcessor());
-    private final List<SubSectionProcessor> subSectionProcessors = List.of(new ExpressionSubSectionProcessor());
+    private final List<RestDocsAnnotationProcessor> annotationProcessors = List.of(new FieldDescriptionProcessor());
+    private final List<RestDocsChildDescriptionProcessor> subSectionProcessors = List.of(new ChildSectionProcessor());
 
     public void handle(Annotation expressionAnnotation, List<FieldDescriptor> fieldDescriptors) {
 

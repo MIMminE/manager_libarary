@@ -1,6 +1,6 @@
-package nuts.lib.manager.restdocs_manager.docs_snippet.expression;
+package nuts.lib.manager.restdocs_manager.expression;
 
-import nuts.lib.manager.restdocs_manager.sub_section.expression.ExpressionSubSection;
+import nuts.lib.manager.restdocs_manager.expression.child.ChildSection;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,9 +9,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface ExpressionField {
+public @interface FieldDescription {
     String name();
     String description();
     boolean optional() default false;
-    ExpressionSubSection[] subSections() default @ExpressionSubSection;
+    ChildSection[] subSections() default @ChildSection;
 }

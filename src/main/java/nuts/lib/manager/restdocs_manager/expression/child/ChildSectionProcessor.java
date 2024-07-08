@@ -1,26 +1,22 @@
-package nuts.lib.manager.restdocs_manager.sub_section.processor;
+package nuts.lib.manager.restdocs_manager.expression.child;
 
-import nuts.lib.manager.restdocs_manager.docs_snippet.RestDocsAnnotationProcessor;
-import nuts.lib.manager.restdocs_manager.sub_section.SubSectionProcessor;
-import nuts.lib.manager.restdocs_manager.sub_section.expression.ExpressionSubSection;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.function.Supplier;
 
-public class ExpressionSubSectionProcessor implements SubSectionProcessor {
+public class ChildSectionProcessor implements RestDocsChildDescriptionProcessor {
 
     @Override
     public void process(Annotation annotation, List<FieldDescriptor> fieldDescriptors) {
-         ExpressionSubSection expressionField = (ExpressionSubSection) annotation;
+         ChildSection expressionField = (ChildSection) annotation;
          fieldDescriptors.add(generateSubsectionDescriptor(expressionField.name(), expressionField.description(), expressionField.optional()));
     }
 
     @Override
     public boolean support(Annotation annotation) {
-        return annotation instanceof ExpressionSubSection;
+        return annotation instanceof ChildSection;
     }
 
      private static FieldDescriptor generateSubsectionDescriptor(String name, String description, boolean optional) {

@@ -2,7 +2,6 @@ package nuts.lib.manager.security_manager.authentication.token.jwt.security;
 
 import com.nimbusds.jwt.JWT;
 import lombok.RequiredArgsConstructor;
-import nuts.lib.manager.security_manager.authentication.token.jwt.AbstractJwtTokenService;
 import nuts.lib.manager.security_manager.authentication.token.jwt.JwtTokenService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;

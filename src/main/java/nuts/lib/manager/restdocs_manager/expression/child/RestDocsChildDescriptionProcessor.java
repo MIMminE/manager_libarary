@@ -1,12 +1,11 @@
-package nuts.lib.manager.restdocs_manager.sub_section;
+package nuts.lib.manager.restdocs_manager.expression.child;
 
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.function.Supplier;
 
-public interface SubSectionProcessor {
+public interface RestDocsChildDescriptionProcessor {
     void process(Annotation annotation, List<FieldDescriptor> fieldDescriptors);
 
     boolean support(Annotation annotation);

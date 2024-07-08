@@ -6,17 +6,14 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.ResultHandler;
 
-import java.util.Objects;
-import java.util.function.Predicate;
-
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
 @Setter
-public class RestDocsBuilder {
+public class RestDocsFactory {
     private String documentName;
     private RequestFieldsSnippet requestFieldsSnippet;
     private ResponseFieldsSnippet responseFieldsSnippet;
-    private Boolean prettyPrint = false;
+    private Boolean prettyPrint = true;
 
     public ResultHandler build() {
 

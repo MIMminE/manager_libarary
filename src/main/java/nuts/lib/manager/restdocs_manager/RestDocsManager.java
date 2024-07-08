@@ -1,123 +1,139 @@
 package nuts.lib.manager.restdocs_manager;
 
+import nuts.lib.manager.restdocs_manager.annotation.RestDocsHolder;
+import nuts.lib.manager.restdocs_manager.annotation.RestDocsSnippet;
+import nuts.lib.manager.restdocs_manager.expression.FieldDescription;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.ResultHandler;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This is a manager class that allows you to easily use the basic use of the RestDocs library on an annotation-based basis.
+ * <p>
+ * The basic manual is as follows:
+ * <p>
+ * 1. {@link RestDocsHolder} annotation specifies a Docs meta-information class that performs the request or response role.
+ * <p>
+ * 2. Use the {@link RestDocsSnippet} annotation and {@link FieldDescription} annotation to enter the document meta information.
+ * <pre>
+ * {@code
+ * @RestDocsHolder(RestDocsHolder.RestDocsHolderType.request)
+ * public class RequestRestDocs {
+ *
+ *     @RestDocsSnippet(fields = {
+ *             @FieldDescription(name = "name", description = "멤버 이름"),
+ *             @FieldDescription(name = "id", description = "요청 아이디"),
+ *             @FieldDescription(name = "password", description = "요청 패스워드"),
+ *             @FieldDescription(name = "contactNumber", description = "멤버 연락처"),
+ *             @FieldDescription(name = "corporationId", description = "소속 기관 ID")
+ *     })
+ *     public Object createMember;
+ *
+ * }
+ * }
+ * </pre>
+ * <p>
+ * 3. If you specify the document meta information using an API such as {@link RestDocsManager#document(String, String)},
+ * <p>
+ * a restDocs document will be generated based on the success of mock mvc test
+ *
+ * <pre>
+ * {@code
+ * RestDocsManager restDocsManager = new RestDocsManager(RequestRestDocs.class, ResponseRestDocs.class);
+ *
+ * mockController.perform(MockMvcRequestBuilders.post("/api/v1/members")
+ *                 .contentType(MediaType.APPLICATION_JSON)
+ *                 .content(objectMapper.writeValueAsBytes(createMemberRequest)))
+ *         .andExpect(status().isOk())
+ *         .andDo(restDocsManager.document("request_member", "createMember", "createMemberResponse"));
+ * }
+ *
+ * </pre>
+ *
+ * @since 2024. 07. 08
+ */
 public class RestDocsManager {
-    private final AnnotationProcessorDelegator annotationProcessorDelegator;
-    private final List<Class<?>> requestHolders;
-    private final List<Class<?>> responseHolders;
 
-    public RestDocsManager(AnnotationProcessorDelegator annotationProcessorDelegator, Class<?> requestHolder, Class<?> responseHolder) {
-        this.annotationProcessorDelegator = annotationProcessorDelegator;
-        this.requestHolders = List.of(requestHolder);
-        this.responseHolders = List.of(responseHolder);
+    private RestDocsFactory restDocsFactory = new RestDocsFactory();
+    private final AnnotationProcessorDelegator annotationProcessorDelegator = AnnotationProcessorDelegator.INSTANCE;
+    private final Class<?> requestHolder;
+    private final Class<?> responseHolder;
+
+    public RestDocsManager(Class<?> requestHolder, Class<?> responseHolder) {
+        this.requestHolder = requestHolder;
+        this.responseHolder = responseHolder;
     }
 
-    private final RestDocsBuilder restDocsBuilder = new RestDocsBuilder();
-
-    public RestDocsManager onPrettyPrint() {
-        restDocsBuilder.setPrettyPrint(true);
-        return this;
+    public RestDocsManager(Class<?> responseHolder) {
+        this.requestHolder = null;
+        this.responseHolder = responseHolder;
     }
 
-    public ResultHandler document(String documentName, RequestFieldsSnippet requestFieldsSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
-        return this.createDocument(documentName, requestFieldsSnippet, responseFieldsSnippet);
+    public ResultHandler document(String documentName, String requestSnippetFieldName, String responseSnippetFieldName) {
+        restDocsFactory.setDocumentName(documentName);
+        restDocsFactory.setRequestFieldsSnippet(requestFieldsSnippet(requestSnippetFieldName));
+        restDocsFactory.setResponseFieldsSnippet(responseFieldsSnippet(responseSnippetFieldName));
+        return restDocsFactory.build();
     }
 
-    public ResultHandler document(String documentName, ResponseFieldsSnippet responseFieldsSnippet) {
-        return this.createDocument(documentName, responseFieldsSnippet);
+    public ResultHandler document(String documentName, String responseSnippetFieldName) {
+        restDocsFactory.setDocumentName(documentName);
+        restDocsFactory.setResponseFieldsSnippet(responseFieldsSnippet(responseSnippetFieldName));
+        return restDocsFactory.build();
     }
 
-    public ResultHandler document(String documentName, Field docsRequestField, Field docsResponseField) {
-        return this.createDocument(documentName, this.requestFieldsSnippet(docsRequestField), this.responseFieldsSnippet(docsResponseField));
-    }
+    private RequestFieldsSnippet requestFieldsSnippet(String snippetFieldName) {
 
-    public ResultHandler document(String documentName, Field docsResponseField) {
-        return this.createDocument(documentName, this.responseFieldsSnippet(docsResponseField));
-    }
+        if (requestHolder == null) throw new IllegalArgumentException("requestHolder is not injected.");
 
-    public ResultHandler document(String documentName, Class<?> requestClass, Class<?> responseClass) throws NoSuchFieldException {
-        //TODO
-        Field requestField = null;
-        Field responseField = null;
-
-        for (Class<?> requestHolder : requestHolders) {
-            Field[] declaredFields = requestHolder.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                if (Objects.equals(declaredField.getGenericType().getTypeName(), requestClass.getTypeName())) {
-                    requestField = requestHolder.getField(declaredField.getName());
-                }
+        try {
+            if (requestHolder.getAnnotation(RestDocsHolder.class).value() != RestDocsHolder.RestDocsHolderType.request) {
+                throw new IllegalArgumentException("There is no @RestDocsHolder annotation in the injected requestHolder.");
             }
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("There is no @RestDocsHolder annotation in the injected requestHolder.");
         }
 
-        for (Class<?> responseHolder : responseHolders) {
-            Field[] declaredFields = responseHolder.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                if (Objects.equals(declaredField.getGenericType().getTypeName(), responseClass.getTypeName())) {
-                    responseField = responseHolder.getField(declaredField.getName());
-                }
+        try {
+            RestDocsSnippet docsSnippet = Objects.requireNonNull(requestHolder).getField(snippetFieldName).getAnnotation(RestDocsSnippet.class);
+            List<FieldDescriptor> fieldDescriptors = new ArrayList<>();
+            Arrays.stream(docsSnippet.fields()).forEach(expressionField
+                    -> annotationProcessorDelegator.handle(expressionField, fieldDescriptors));
+
+            return PayloadDocumentation.requestFields(fieldDescriptors);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ResponseFieldsSnippet responseFieldsSnippet(String snippetFieldName) {
+        try {
+            if (responseHolder.getAnnotation(RestDocsHolder.class).value() != RestDocsHolder.RestDocsHolderType.response) {
+                throw new IllegalArgumentException("There is no @RestDocsHolder annotation in the injected responseHolder.");
             }
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("There is no @RestDocsHolder annotation in the injected responseHolder.");
         }
 
-        return this.document(documentName, requestField, responseField);
+        try {
+            RestDocsSnippet docsSnippet = responseHolder.getField(snippetFieldName).getAnnotation(RestDocsSnippet.class);
+            List<FieldDescriptor> fieldDescriptors = new ArrayList<>();
+            Arrays.stream(docsSnippet.fields()).forEach(expressionField
+                    -> annotationProcessorDelegator.handle(expressionField, fieldDescriptors));
+
+            return PayloadDocumentation.responseFields(fieldDescriptors);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
     }
-
-    public RequestFieldsSnippet requestFieldsSnippet(Field docsRequest) {
-        if (docsRequest.getDeclaringClass().getAnnotation(DocsHolder.class).value() != DocsHolder.RestDocsHolderType.request)
-            throw new IllegalArgumentException("@docsHolder's value is not request");
-
-        DocsSnippet docsSnippet = docsRequest.getAnnotation(DocsSnippet.class);
-
-        List<FieldDescriptor> fieldDescriptors = new ArrayList<>();
-        Arrays.stream(docsSnippet.fields()).forEach(expressionField
-                -> annotationProcessorDelegator.handle(expressionField, fieldDescriptors));
-
-        return createRequestFieldsSnippet(fieldDescriptors);
-    }
-
-    public ResponseFieldsSnippet responseFieldsSnippet(Field docsRequest) {
-        if (docsRequest.getDeclaringClass().getAnnotation(DocsHolder.class).value() != DocsHolder.RestDocsHolderType.response)
-            throw new IllegalArgumentException("@docsHolder's value is not response");
-
-        DocsSnippet docsSnippet = docsRequest.getAnnotation(DocsSnippet.class);
-
-        List<FieldDescriptor> fieldDescriptors = new ArrayList<>();
-        Arrays.stream(docsSnippet.fields()).forEach(expressionField
-                -> annotationProcessorDelegator.handle(expressionField, fieldDescriptors));
-
-        return createResponseFieldSnippet(fieldDescriptors);
-    }
-
-    private ResultHandler createDocument(String documentName, RequestFieldsSnippet requestFieldsSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
-        restDocsBuilder.setDocumentName(documentName);
-        restDocsBuilder.setRequestFieldsSnippet(requestFieldsSnippet);
-        restDocsBuilder.setResponseFieldsSnippet(responseFieldsSnippet);
-        return restDocsBuilder.build();
-    }
-
-    private ResultHandler createDocument(String documentName, ResponseFieldsSnippet responseFieldsSnippet) {
-        restDocsBuilder.setDocumentName(documentName);
-        restDocsBuilder.setResponseFieldsSnippet(responseFieldsSnippet);
-        return restDocsBuilder.build();
-    }
-
-    private static RequestFieldsSnippet createRequestFieldsSnippet(List<FieldDescriptor> fieldDescriptors) {
-        return PayloadDocumentation.requestFields(fieldDescriptors);
-    }
-
-    private static ResponseFieldsSnippet createResponseFieldSnippet(List<FieldDescriptor> fieldDescriptors) {
-        return PayloadDocumentation.responseFields(fieldDescriptors);
-    }
-
-
 }

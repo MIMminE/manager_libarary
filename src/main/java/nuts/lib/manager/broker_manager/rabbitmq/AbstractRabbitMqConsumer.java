@@ -6,7 +6,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
 
@@ -74,8 +73,6 @@ public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Object>
         if (workerThread != null) this.workerThread.interrupt();
     }
 
-    protected abstract Consumer<Object> getCallback();
-
     private ThreadFactory getThreadFactory(String poolName) {
 
         return new ThreadFactory() {
@@ -87,4 +84,6 @@ public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Object>
             }
         };
     }
+
+    protected abstract Consumer<Object> getCallback();
 }
