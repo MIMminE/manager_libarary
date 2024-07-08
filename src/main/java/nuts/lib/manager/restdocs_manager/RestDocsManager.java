@@ -1,18 +1,22 @@
 package nuts.lib.manager.restdocs_manager;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nuts.lib.manager.restdocs_manager.annotation.RestDocsHolder;
 import nuts.lib.manager.restdocs_manager.annotation.RestDocsSnippet;
 import nuts.lib.manager.restdocs_manager.expression.FieldDescription;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This is a manager class that allows you to easily use the basic use of the RestDocs library on an annotation-based basis.
@@ -136,4 +140,5 @@ public class RestDocsManager {
         }
 
     }
+
 }
