@@ -74,12 +74,26 @@ import java.util.concurrent.ConcurrentHashMap;
  *                 OrderSheet.order(ApprovalEntity.class, 5));
  *     }
  * }
+ * [ 2024. 07. 09 update example ]
+ *
+ *
  * }
  *
  * </pre>
  *
  * @author nuts
  * @since 2024. 05. 23
+ */
+
+/**
+ * [ Add example ]
+ * <pre>
+ * {@code
+ * List.of(OrderSheet.order(orderCustom(CreateCorporationRequest.class).set("grade",
+ *          Arbitraries.of("basic", "gold")), 1));
+ * }
+ * @since 2024. 07. 09
+ * </pre>
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class FixtureGenerateSupport {
@@ -121,6 +135,10 @@ public abstract class FixtureGenerateSupport {
 
     protected <T> ArbitraryBuilder<T> getFixtureBuilder(Class<T> targetClass) {
         return fixtureMonkey.giveMeBuilder(targetClass);
+    }
+
+    public void printFixtures() {
+        this.orderedObjectMap.entrySet().forEach(e -> System.out.println(e.getKey() + " " + e.getValue()));
     }
 
     protected abstract List<OrderSheet> ordersObject();

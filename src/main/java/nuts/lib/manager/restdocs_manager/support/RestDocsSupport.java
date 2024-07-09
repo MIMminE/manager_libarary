@@ -1,4 +1,4 @@
-package nuts.lib.manager.restdocs_manager;
+package nuts.lib.manager.restdocs_manager.support;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 /**
  * It inherits from the controller test class using mockMvc.
+ * <p>
  *
  * @since 2024. 07. 08
  */
