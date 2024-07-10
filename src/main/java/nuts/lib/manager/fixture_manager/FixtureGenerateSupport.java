@@ -4,6 +4,7 @@ import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import org.junit.jupiter.api.TestInstance;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,7 +96,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2024. 07. 09
  * </pre>
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class FixtureGenerateSupport {
     private final FixtureMonkey fixtureMonkey = FixtureManager.supplierDefault.get();
 
@@ -139,6 +139,18 @@ public abstract class FixtureGenerateSupport {
 
     public void printFixtures() {
         this.orderedObjectMap.entrySet().forEach(e -> System.out.println(e.getKey() + " " + e.getValue()));
+    }
+
+    public void changeFieldValue(Object instance, String fieldName, Object value) {
+        try {
+            Class<?> aClass = instance.getClass();
+            Field field = aClass.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(instance, value);
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected abstract List<OrderSheet> ordersObject();
