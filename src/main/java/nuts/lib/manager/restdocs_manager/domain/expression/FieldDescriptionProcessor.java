@@ -5,6 +5,7 @@ import nuts.lib.manager.restdocs_manager.domain.expression.child.RestDocsChildDe
 import nuts.lib.manager.restdocs_manager.domain.expression.child.ChildSection;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.snippet.Attributes;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -38,7 +39,10 @@ public class FieldDescriptionProcessor implements RestDocsAnnotationProcessor {
     }
 
     private static FieldDescriptor generateFieldDescriptor(String name, String description, boolean optional) {
-        return PayloadDocumentation.fieldWithPath(name).description(description);
+        if (optional)
+            return PayloadDocumentation.fieldWithPath(name).description(description).optional();
+        else
+            return PayloadDocumentation.fieldWithPath(name).description(description);
     }
 
     private static final Predicate<ChildSection[]> requiredIntrospect = sections

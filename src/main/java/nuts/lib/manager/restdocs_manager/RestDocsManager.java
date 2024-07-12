@@ -104,7 +104,6 @@ public class RestDocsManager {
             List<FieldDescriptor> fieldDescriptors = new ArrayList<>();
             Arrays.stream(docsSnippet.fields()).forEach(expressionField
                     -> annotationProcessorDelegator.handle(expressionField, fieldDescriptors));
-
             return PayloadDocumentation.requestFields(fieldDescriptors);
 
         } catch (NoSuchFieldException e) {
