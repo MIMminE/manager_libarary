@@ -3,6 +3,7 @@ package nuts.lib.manager.restdocs_manager.support;
 import nuts.lib.manager.fixture_manager.FixtureGenerateSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
  * @since 2024. 07. 09
  */
 @ExtendWith(RestDocumentationExtension.class)
+@ExtendWith(MockitoExtension.class)
 public abstract class ExtendsFixtureRestDocsSupport extends FixtureGenerateSupport {
 
     protected MockMvc mockController;

@@ -34,7 +34,7 @@ public abstract class FixtureManager {
 
     static public Supplier<FixtureMonkey> supplierDefault = () -> FixtureMonkey.builder()
             .objectIntrospector(BuilderArbitraryIntrospector.INSTANCE)
-            .defaultNotNull(true).nullableElement(true).nullableElement(true)
+            .defaultNotNull(true).nullableElement(false)
             .plugin(new JakartaValidationPlugin())
             .plugin(new JqwikPlugin()
                     .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
