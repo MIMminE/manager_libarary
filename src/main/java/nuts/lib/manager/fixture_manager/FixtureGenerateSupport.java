@@ -97,7 +97,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  */
 public abstract class FixtureGenerateSupport {
-    private final FixtureMonkey fixtureMonkey = FixtureManager.supplierDefault.get();
+    private final FixtureMonkey fixtureMonkey = FixtureManager.supplierFieldReflection.get();
 
     private final Map<Class<?>, List<?>> orderedObjectMap = init(ordersObject());
 
