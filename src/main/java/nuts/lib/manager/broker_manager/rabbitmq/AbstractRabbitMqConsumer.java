@@ -3,18 +3,20 @@ package nuts.lib.manager.broker_manager.rabbitmq;
 import lombok.extern.slf4j.Slf4j;
 import nuts.lib.manager.broker_manager.BrokerConsumer;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
 
 @Slf4j
-public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Object> {
+public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Map<String, Object>> {
 
     private final RabbitTemplate rabbitTemplate;
     private final String queueName;
-    private final Consumer<Object> callback = getCallback();
+    private final Consumer<Map<String,Object>> callback = getCallback();
     private final ExecutorService consumerExecutor;
     private volatile boolean interrupted = false;
     private String poolName = "rabbitmq_consumer";
@@ -52,7 +54,7 @@ public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Object>
                     try {
                         while (!interrupted) {
                             workerThread = Thread.currentThread();
-                            Object received = rabbitTemplate.receiveAndConvert(queueName);
+                            Map<String, Object> received = rabbitTemplate.receiveAndConvert(queueName,  ParameterizedTypeReference.forType(Map.class));
                             if (received != null) callback.accept(received);
                         }
                     } catch (Exception e) {
@@ -85,5 +87,5 @@ public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Object>
         };
     }
 
-    protected abstract Consumer<Object> getCallback();
+    protected abstract Consumer<Map<String, Object>> getCallback();
 }
