@@ -54,6 +54,8 @@ public abstract class AbstractRabbitMqConsumer implements BrokerConsumer<Map<Str
                     try {
                         while (!interrupted) {
                             workerThread = Thread.currentThread();
+                            
+                            //TODO 오류
                             Map<String, Object> received = rabbitTemplate.receiveAndConvert(queueName,  ParameterizedTypeReference.forType(Map.class));
                             if (received != null) callback.accept(received);
                         }
