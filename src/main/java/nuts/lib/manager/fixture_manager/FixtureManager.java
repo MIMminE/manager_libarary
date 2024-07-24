@@ -8,6 +8,8 @@ import com.navercorp.fixturemonkey.api.jqwik.JavaTypeArbitraryGenerator;
 import com.navercorp.fixturemonkey.api.jqwik.JqwikPlugin;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 import net.jqwik.api.Arbitraries;
+import net.jqwik.api.arbitraries.IntegerArbitrary;
+import net.jqwik.api.arbitraries.LongArbitrary;
 import net.jqwik.api.arbitraries.StringArbitrary;
 
 import java.util.function.Supplier;
@@ -41,7 +43,17 @@ public abstract class FixtureManager {
                     .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
                         @Override
                         public StringArbitrary strings() {
-                            return Arbitraries.strings().alpha();
+                            return Arbitraries.strings().ofMinLength(3).ofMaxLength(15).alpha();
+                        }
+
+                        @Override
+                        public IntegerArbitrary integers() {
+                            return Arbitraries.integers().between(0, 10000);
+                        }
+
+                        @Override
+                        public LongArbitrary longs() {
+                            return Arbitraries.longs().between(0, 10000);
                         }
                     }))
             .build();
@@ -54,21 +66,42 @@ public abstract class FixtureManager {
                     .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
                         @Override
                         public StringArbitrary strings() {
-                            return Arbitraries.strings().alpha();
+                            return Arbitraries.strings().ofMinLength(3).ofMaxLength(15).alpha();
+                        }
+
+                        @Override
+                        public IntegerArbitrary integers() {
+                            return Arbitraries.integers().between(0, 10000);
+                        }
+
+                        @Override
+                        public LongArbitrary longs() {
+                            return Arbitraries.longs().between(0, 10000);
                         }
                     }))
             .build();
 
     static public Supplier<FixtureMonkey> supplierFieldReflection = () -> FixtureMonkey.builder()
             .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-            .defaultNotNull(true)
+            .defaultNotNull(true).nullableElement(false)
             .plugin(new JakartaValidationPlugin())
             .plugin(new JqwikPlugin()
                     .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
                         @Override
                         public StringArbitrary strings() {
-                            return Arbitraries.strings().alpha();
+                            return Arbitraries.strings().ofMinLength(3).ofMaxLength(15).alpha();
                         }
+
+                        @Override
+                        public IntegerArbitrary integers() {
+                            return Arbitraries.integers().between(0, 10000);
+                        }
+
+                        @Override
+                        public LongArbitrary longs() {
+                            return Arbitraries.longs().between(0, 10000);
+                        }
+
                     }))
             .build();
 }
