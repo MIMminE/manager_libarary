@@ -97,7 +97,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  */
 public abstract class FixtureGenerateSupport {
-    private final FixtureMonkey fixtureMonkey = FixtureManager.supplierFieldReflection.get();
+    private final FixtureMonkey fixtureMonkey = getFixtureMonkey();
 
     private final Map<Class<?>, List<?>> orderedObjectMap = init(ordersObject());
 
@@ -151,6 +151,10 @@ public abstract class FixtureGenerateSupport {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected FixtureMonkey getFixtureMonkey() {
+        return FixtureManager.supplierFieldReflection.get();
     }
 
     protected abstract List<OrderSheet> ordersObject();
