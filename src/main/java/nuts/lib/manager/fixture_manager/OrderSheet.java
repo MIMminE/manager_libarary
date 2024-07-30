@@ -2,6 +2,7 @@ package nuts.lib.manager.fixture_manager;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * This is the DTO class used by the fixture creation order used by the {@link FixtureGenerateSupport#getOrderedObject(Class)}.
@@ -10,6 +11,7 @@ import lombok.Getter;
  * @since 2024. 05. 23
  */
 @Getter
+@ToString
 public class OrderSheet {
     Class<?> orderClass;
     int count;

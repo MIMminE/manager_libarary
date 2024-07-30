@@ -3,20 +3,33 @@ package nuts.lib.manager.fixture_manager;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.junit.jupiter.api.DisplayName;
+import lombok.Getter;
+import lombok.ToString;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static nuts.lib.manager.fixture_manager.FixtureManager.orderCustom;
 
-class FixtureGenerateSupportTest extends FixtureGenerateSupport{
+class FixtureGenerateSupportTest {
+
+    static FixtureManager fixtureManager;
+
+    @BeforeAll
+    static void setUp() {
+        fixtureManager = new FixtureManager(List.of(
+                OrderSheet.order(
+                    orderCustom(FixtureSampleClass.class)
+                            .minSize("requestId", 3), 1)));
+    }
 
     @RepeatedTest(100)
     void test() {
         // given
-        FixtureSampleClass fixtureSampleClass = getOrderedObject(FixtureSampleClass.class).get(0);
+
+//        FixtureSampleClass fixtureSampleClass = fixtureManager.getOrderObject(FixtureSampleClass.class);
+        FixtureSampleClass fixtureSampleClass = fixtureManager.getOrderObject(FixtureSampleClass.class);
 
         // when
         System.out.println(fixtureSampleClass);
@@ -26,15 +39,8 @@ class FixtureGenerateSupportTest extends FixtureGenerateSupport{
 
 
 
-
-
-    @Override
-    protected List<OrderSheet> ordersObject() {
-        return List.of(
-                OrderSheet.order(FixtureSampleClass.class, 1)
-        );
-    }
-
+    @Getter
+    @ToString
     static class FixtureSampleClass {
         @Size(min = 5)
         private String requestId;

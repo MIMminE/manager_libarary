@@ -2,7 +2,6 @@ package nuts.lib.manager.fixture_manager;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import org.junit.jupiter.api.TestInstance;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -96,32 +95,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2024. 07. 09
  * </pre>
  */
+@Deprecated(since = "2024. 07. 30")
 public abstract class FixtureGenerateSupport {
     private final FixtureMonkey fixtureMonkey = getFixtureMonkey();
-    
+
     private final Map<Class<?>, List<?>> orderedObjectMap = init(ordersObject());
 
     private Map<Class<?>, List<?>> init(List<OrderSheet> orderSheets) {
 
         Map<Class<?>, List<?>> result = new ConcurrentHashMap<>();
 
-        for (OrderSheet orderSheet : orderSheets) {
-            if (orderSheet.getArbitraryBuilder() == null) {
-                result.put(orderSheet.getOrderClass(), fixtureMonkey.giveMe(orderSheet.getOrderClass(), orderSheet.getCount()));
-            } else {
-                result.put(orderSheet.getArbitraryBuilder().sample().getClass(), orderSheet.getArbitraryBuilder().sampleList(orderSheet.getCount()));
-            }
+        orderSheets.stream().filter(orderSheet -> orderSheet.getCount() == 1 && orderSheet.getArbitraryBuilder() == null)
+                .forEach(orderSheet -> result.put(orderSheet.getOrderClass(), List.of(fixtureMonkey.giveMeOne(orderSheet.getOrderClass()))));
 
-        }
+        orderSheets.stream().filter(orderSheet -> orderSheet.getCount() > 1 && orderSheet.getArbitraryBuilder() == null)
+                .forEach(orderSheet -> result.put(orderSheet.getOrderClass(), fixtureMonkey.giveMe(orderSheet.getOrderClass(), orderSheet.getCount())));
 
-//        orderSheets.stream().filter(orderSheet -> orderSheet.getCount() == 1 && orderSheet.getArbitraryBuilder() == null)
-//                .forEach(orderSheet -> result.put(orderSheet.getOrderClass(), List.of(fixtureMonkey.giveMeOne(orderSheet.getOrderClass()))));
-//
-//        orderSheets.stream().filter(orderSheet -> orderSheet.getCount() > 1 && orderSheet.getArbitraryBuilder() == null)
-//                .forEach(orderSheet -> result.put(orderSheet.getOrderClass(), fixtureMonkey.giveMe(orderSheet.getOrderClass(), orderSheet.getCount())));
-//
-//        orderSheets.stream().filter(orderSheet -> orderSheet.getArbitraryBuilder() != null)
-//                .forEach(orderSheet -> result.put(orderSheet.getArbitraryBuilder().sample().getClass(), orderSheet.getArbitraryBuilder().sampleList(orderSheet.getCount())));
+        orderSheets.stream().filter(orderSheet -> orderSheet.getArbitraryBuilder() != null)
+                .forEach(orderSheet -> result.put(orderSheet.getArbitraryBuilder().sample().getClass(), orderSheet.getArbitraryBuilder().sampleList(orderSheet.getCount())));
 
         return result;
     }
@@ -163,7 +154,7 @@ public abstract class FixtureGenerateSupport {
     }
 
     protected FixtureMonkey getFixtureMonkey() {
-        return FixtureManager.supplierFieldReflection.get();
+        return FixtureMonkeySupplier.supplierFieldReflection.get();
     }
 
     protected abstract List<OrderSheet> ordersObject();

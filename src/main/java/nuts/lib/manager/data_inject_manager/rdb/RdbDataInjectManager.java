@@ -4,16 +4,11 @@ import com.navercorp.fixturemonkey.FixtureMonkey;
 import jakarta.persistence.EntityManager;
 import nuts.lib.manager.executor_manager.ScheduleExecutorManager;
 import nuts.lib.manager.executor_manager.executor.ExecutorBuilder;
-import nuts.lib.manager.fixture_manager.FixtureManager;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Commit;
+import nuts.lib.manager.fixture_manager.FixtureMonkeySupplier;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class RdbDataInjectManager<T> {
@@ -21,7 +16,7 @@ public class RdbDataInjectManager<T> {
     private final EntityManager entityManager;
     private final ScheduleExecutorManager scheduleExecutorManager = new ScheduleExecutorManager(ExecutorBuilder.newSingleThreadScheduledExecutor("data_inject"));
 
-    private final FixtureMonkey fixtureMonkey = FixtureManager.supplierDefault.get();
+    private final FixtureMonkey fixtureMonkey = FixtureMonkeySupplier.supplierDefault.get();
     private final Class<T> entity;
     private final PlatformTransactionManager transactionManager;
 

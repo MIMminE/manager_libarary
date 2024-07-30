@@ -1,7 +1,7 @@
 package nuts.lib.manager.data_access_manager.jdbc;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import nuts.lib.manager.fixture_manager.FixtureManager;
+import nuts.lib.manager.fixture_manager.FixtureMonkeySupplier;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.Field;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class JdbcDataInjector {
     private final JdbcTemplate jdbcTemplate;
-    private final FixtureMonkey fixtureMonkey = FixtureManager.supplierSetterObjectIntrospect.get();
+    private final FixtureMonkey fixtureMonkey = FixtureMonkeySupplier.supplierSetterObjectIntrospect.get();
 
     public JdbcDataInjector(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
