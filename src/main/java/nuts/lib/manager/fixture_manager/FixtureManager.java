@@ -3,6 +3,7 @@ package nuts.lib.manager.fixture_manager;
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,6 +48,18 @@ public class FixtureManager {
 
     public static <T> ArbitraryBuilder<T> orderCustom(Class<T> targetClass) {
         return fixtureMonkey.giveMeBuilder(targetClass);
+    }
+
+    public static void changeFieldValue(Object instance, String fieldName, Object value) {
+        try {
+            Class<?> aClass = instance.getClass();
+            Field field = aClass.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(instance, value);
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Map<Class<?>, List<?>> init(List<OrderSheet> orderSheets) {
