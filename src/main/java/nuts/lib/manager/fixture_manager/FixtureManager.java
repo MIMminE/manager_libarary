@@ -1,107 +1,64 @@
 package nuts.lib.manager.fixture_manager;
 
+import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.BeanArbitraryIntrospector;
-import com.navercorp.fixturemonkey.api.introspector.BuilderArbitraryIntrospector;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.api.jqwik.JavaTypeArbitraryGenerator;
-import com.navercorp.fixturemonkey.api.jqwik.JqwikPlugin;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-import net.jqwik.api.Arbitraries;
-import net.jqwik.api.arbitraries.IntegerArbitrary;
-import net.jqwik.api.arbitraries.LongArbitrary;
-import net.jqwik.api.arbitraries.StringArbitrary;
 
-import java.util.function.Supplier;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A manager used to create test class fixtures that are primarily used for testing purposes.
+ * It is an improvement from the existing method of inheritance.
  * <p>
- * We need a class-specific builder because we create a fixture by referencing the builders in a given class.
- * <p>
- * Apply the Validation annotation in the field.
- * <p>
+ * The existing method was heavily loaded because it was initialized for each test.
+ *
  * <pre>
  * {@code
- * FixtureMonkey fixtureMonkey = FixtureManager.supplierDefault.get();
- * RequestUser requestCreateGroup = fixtureMonkey.giveMeOne(RequestUser.class);
+ * static FixtureManager fixtureManager;
+ *
+ * @BeforeAll
+ * static void setUp() {
+ *    fixtureManager = new FixtureManager(List.of(
+ *            OrderSheet.order(
+ *                orderCustom(FixtureSampleClass.class)
+ *                        .minSize("requestId", 3), 1)));
+ * }
  * }
  * </pre>
- * <p>
- * This class can be used separately, but the purpose is to inherit and use {@link FixtureGenerateSupport} for the test class.
- *
- * @author nuts
- * @since 2024. 05. 14
+ * It is important to note that from this version onwards, the validation annotation plugin has been modified to not be used.
  */
-public abstract class FixtureManager {
+public class FixtureManager {
 
-    static public Supplier<FixtureMonkey> supplierDefault = () -> FixtureMonkey.builder()
-            .objectIntrospector(BuilderArbitraryIntrospector.INSTANCE)
-            .defaultNotNull(true).nullableElement(false)
-            .plugin(new JakartaValidationPlugin())
-            .plugin(new JqwikPlugin()
-                    .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
-                        @Override
-                        public StringArbitrary strings() {
-                            return Arbitraries.strings().ofMinLength(3).ofMaxLength(15).alpha();
-                        }
+    private final Map<Class<?>, List<?>> orderObjectMap;
+    private static final FixtureMonkey fixtureMonkey = FixtureMonkeySupplier.supplierFieldReflection.get();
 
-                        @Override
-                        public IntegerArbitrary integers() {
-                            return Arbitraries.integers().between(0, 10000);
-                        }
+    public FixtureManager(List<OrderSheet> orderSheets) {
+        this.orderObjectMap = init(orderSheets);
+    }
 
-                        @Override
-                        public LongArbitrary longs() {
-                            return Arbitraries.longs().between(0, 10000);
-                        }
-                    }))
-            .build();
+    public <T> T getOrderObject(Class<T> targetClass) {
+        return (T) orderObjectMap.get(targetClass).get(0);
+    }
 
-    static public Supplier<FixtureMonkey> supplierSetterObjectIntrospect = () -> FixtureMonkey.builder()
-            .objectIntrospector(BeanArbitraryIntrospector.INSTANCE)
-            .defaultNotNull(true)
-            .plugin(new JakartaValidationPlugin())
-            .plugin(new JqwikPlugin()
-                    .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
-                        @Override
-                        public StringArbitrary strings() {
-                            return Arbitraries.strings().ofMinLength(3).ofMaxLength(15).alpha();
-                        }
+    public <T> List<T> getOrderObjects(Class<T> targetClass) {
+        return (List<T>) orderObjectMap.get(targetClass);
+    }
 
-                        @Override
-                        public IntegerArbitrary integers() {
-                            return Arbitraries.integers().between(0, 10000);
-                        }
+    public static <T> ArbitraryBuilder<T> orderCustom(Class<T> targetClass) {
+        return fixtureMonkey.giveMeBuilder(targetClass);
+    }
 
-                        @Override
-                        public LongArbitrary longs() {
-                            return Arbitraries.longs().between(0, 10000);
-                        }
-                    }))
-            .build();
+    private Map<Class<?>, List<?>> init(List<OrderSheet> orderSheets) {
+        Map<Class<?>, List<?>> result = new ConcurrentHashMap<>();
 
-    static public Supplier<FixtureMonkey> supplierFieldReflection = () -> FixtureMonkey.builder()
-            .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-            .defaultNotNull(true).nullableElement(false)
-            .plugin(new JakartaValidationPlugin())
-            .plugin(new JqwikPlugin()
-                    .javaTypeArbitraryGenerator(new JavaTypeArbitraryGenerator() {
-                        @Override
-                        public StringArbitrary strings() {
-                            return Arbitraries.strings().ofMinLength(3).ofMaxLength(15).alpha();
-                        }
-
-                        @Override
-                        public IntegerArbitrary integers() {
-                            return Arbitraries.integers().between(0, 10000);
-                        }
-
-                        @Override
-                        public LongArbitrary longs() {
-                            return Arbitraries.longs().between(0, 10000);
-                        }
-
-                    }))
-            .build();
+        for (OrderSheet orderSheet : orderSheets) {
+            System.out.println(orderSheet.toString());
+            if (orderSheet.getArbitraryBuilder() == null) {
+                result.put(orderSheet.getOrderClass(), fixtureMonkey.giveMe(orderSheet.getOrderClass(), orderSheet.getCount()));
+            } else {
+                result.put(orderSheet.getArbitraryBuilder().sample().getClass(), orderSheet.getArbitraryBuilder().sampleList(orderSheet.getCount()));
+            }
+        }
+        return result;
+    }
 }

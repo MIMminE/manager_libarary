@@ -2,7 +2,6 @@ package nuts.lib.manager.fixture_manager;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import org.junit.jupiter.api.TestInstance;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -96,6 +95,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2024. 07. 09
  * </pre>
  */
+@Deprecated(since = "2024. 07. 30")
 public abstract class FixtureGenerateSupport {
     private final FixtureMonkey fixtureMonkey = getFixtureMonkey();
 
@@ -154,7 +154,7 @@ public abstract class FixtureGenerateSupport {
     }
 
     protected FixtureMonkey getFixtureMonkey() {
-        return FixtureManager.supplierFieldReflection.get();
+        return FixtureMonkeySupplier.supplierFieldReflection.get();
     }
 
     protected abstract List<OrderSheet> ordersObject();

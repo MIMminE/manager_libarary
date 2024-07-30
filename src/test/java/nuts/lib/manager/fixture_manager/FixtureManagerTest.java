@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static nuts.lib.manager.fixture_manager.FixtureManager.supplierFieldReflection;
+import static nuts.lib.manager.fixture_manager.FixtureMonkeySupplier.supplierFieldReflection;
 
 class FixtureManagerTest {
 
