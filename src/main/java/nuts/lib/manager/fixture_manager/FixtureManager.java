@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * }
  * </pre>
  * It is important to note that from this version onwards, the validation annotation plugin has been modified to not be used.
+ * @since 2024. 07. 30
  */
 public class FixtureManager {
 
@@ -52,7 +53,6 @@ public class FixtureManager {
         Map<Class<?>, List<?>> result = new ConcurrentHashMap<>();
 
         for (OrderSheet orderSheet : orderSheets) {
-            System.out.println(orderSheet.toString());
             if (orderSheet.getArbitraryBuilder() == null) {
                 result.put(orderSheet.getOrderClass(), fixtureMonkey.giveMe(orderSheet.getOrderClass(), orderSheet.getCount()));
             } else {
